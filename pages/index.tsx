@@ -2,107 +2,69 @@ import { ConnectWallet } from "@thirdweb-dev/react";
 import styles from "../styles/Home.module.css";
 import Image from "next/image";
 import { NextPage } from "next";
+import {
+  Box,
+  Button,
+  Flex,
+  Heading,
+  Text,
+  Tabs,
+  TabList,
+  TabPanels,
+  Tab,
+  TabPanel,
+} from "@chakra-ui/react";
+import TabCard from "../components/TabCard";
 
 const Home: NextPage = () => {
   return (
-    <main className={styles.main}>
-      <div className={styles.container}>
-        <div className={styles.header}>
-          <h1 className={styles.title}>
-            Welcome to{" "}
-            <span className={styles.gradientText0}>
-              <a
-                href="https://thirdweb.com/"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                thirdweb.
-              </a>
+    <Box className={styles.container}>
+      <Box className={styles.headingSection}>
+        <img
+          width={"100%"}
+          src="https://imgur.com/d47svBB.png"
+          alt="seaction_logo"
+        />
+      </Box>
+      <Box>
+        <Box className={styles.headLine}>
+          <Text className={styles.headingTxt}>
+            Discover the vast universe of <span>Hippie Aliens Cosmic Club</span>
+          </Text>
+          <p className={styles.para}>
+            H.A.C.K is the gateway to Zuraverse. H.A.C.K NFTs introduce
+            Zuraverse to the Web3 audience.
+            <br />
+            <span>
+              {" "}
+              They are the stepping stone in the formation of Zuraverse.
             </span>
-          </h1>
-
-          <p className={styles.description}>
-            Get started by configuring your desired network in{" "}
-            <code className={styles.code}>src/index.js</code>, then modify the{" "}
-            <code className={styles.code}>src/App.js</code> file!
           </p>
+          <Flex mt={7} gap={7}>
+            <Button bg={"blue"}>Connect Wallet</Button>
+            <Button>Read More</Button>
+          </Flex>
+        </Box>
+      </Box>
 
-          <div className={styles.connect}>
-            <ConnectWallet
-              dropdownPosition={{
-                side: "bottom",
-                align: "center",
-              }}
-            />
-          </div>
-        </div>
+      <Box className={styles.tabs}>
+        <Tabs>
+          <TabList>
+            <Tab>Zuraverse</Tab>
+            <Tab>Conzura</Tab>
+          </TabList>
 
-        <div className={styles.grid}>
-          <a
-            href="https://portal.thirdweb.com/"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              src="/images/portal-preview.png"
-              alt="Placeholder preview of starter"
-              width={300}
-              height={200}
-            />
-            <div className={styles.cardText}>
-              <h2 className={styles.gradientText1}>Portal ➜</h2>
-              <p>
-                Guides, references, and resources that will help you build with
-                thirdweb.
-              </p>
-            </div>
-          </a>
-
-          <a
-            href="https://thirdweb.com/dashboard"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              src="/images/dashboard-preview.png"
-              alt="Placeholder preview of starter"
-              width={300}
-              height={200}
-            />
-            <div className={styles.cardText}>
-              <h2 className={styles.gradientText2}>Dashboard ➜</h2>
-              <p>
-                Deploy, configure, and manage your smart contracts from the
-                dashboard.
-              </p>
-            </div>
-          </a>
-
-          <a
-            href="https://thirdweb.com/templates"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              src="/images/templates-preview.png"
-              alt="Placeholder preview of templates"
-              width={300}
-              height={200}
-            />
-            <div className={styles.cardText}>
-              <h2 className={styles.gradientText3}>Templates ➜</h2>
-              <p>
-                Discover and clone template projects showcasing thirdweb
-                features.
-              </p>
-            </div>
-          </a>
-        </div>
-      </div>
-    </main>
+          <TabPanels>
+            <TabPanel className={styles.grid}>
+              <TabCard />
+            </TabPanel>
+            <TabPanel className={styles.grid}>
+              <p>Coming Soon😊!</p>
+            </TabPanel>
+          </TabPanels>
+        </Tabs>
+      </Box>
+    </Box>
   );
 };
 

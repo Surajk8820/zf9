@@ -1,0 +1,41 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
+
+.footerContainer {
+  width: 100%;
+  height: fit-content;
+  justify-content: space-around;
+  align-items: start;
+  padding: 30px 40px;
+  font-family: "Poppins", sans-serif;
+}
+
+.navContainer > div {
+  height: fit-content;
+}
+
+.linksDiv {
+  gap: 50px;
+}
+
+.linksDiv > div {
+  text-align: start;
+  flex-direction: column;
+  padding: 0px 20px;
+}
+
+.linksDiv > div  p {
+  font-size: 20px;
+}
+
+.links {
+  display: flex;
+  flex-direction: column;
+  text-align: start;
+  margin-top: 20px;
+  color: grey;
+  font-weight: 400;
+}
+
+.links > a:hover{
+  color: rgb(208, 205, 205);
+}

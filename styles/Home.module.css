@@ -1,145 +1,96 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+
 .container {
+  font-family: "Poppins", sans-serif;
   width: 100%;
-  max-width: 1440px;
-  padding: 0 1rem;
-  margin: 0 auto;
+  padding: 20px 40px;
+  margin: auto;
 }
 
-.gradientText0 {
-  background: -webkit-linear-gradient(#bfa3da, #84309c, #c735b0);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+.headingSection {
+  position: relative;
 }
 
-.gradientText1 {
-  background: -webkit-linear-gradient(#a79af9, #7aa8d2);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+.headLine {
+  position: absolute;
+  width: 700px;
+  right: 200px;
+  top: 150px;
+  font-size: 49px;
+  font-weight: bold;
 }
 
-.gradientText2 {
-  background: -webkit-linear-gradient(#bfa3da, #743f93);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+.para {
+  font-size: 16px;
+  letter-spacing: 2px;
+  font-weight: 400;
+  line-height: 25px;
+  margin-top: 10px;
+  color: white;
 }
 
-.gradientText3 {
-  background: -webkit-linear-gradient(#c35ab1, #e9a8d9);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.title a:hover,
-.title a:focus,
-.title a:active {
-  text-decoration: underline;
-  text-decoration-color: #84309c;
-}
-
-.title {
-  line-height: 1.15;
-  font-size: 4rem;
-}
-
-.title,
-.description {
-  text-align: left;
-}
-
-.connect {
-  margin-bottom: 2rem;
-}
-
-.description {
-  margin-top: 2rem;
-  margin-bottom: 2rem;
-  line-height: 1.5;
-  font-size: 1.5rem;
-}
-
-.code {
-  background: #555;
-  border-radius: 5px;
-  padding: 0.5em;
-  font-size: 1.1rem;
+.headingTxt {
+  color: white;
 }
 
 .grid {
-  display: flex;
-  justify-content: left;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   gap: 20px;
 }
 
-.card {
-  background-color: #131313;
-  text-align: left;
-  color: inherit;
-  text-decoration: none;
-  border-radius: 10px;
-  transition: color 0.15s ease, border-color 0.15s ease;
-  max-width: 440px;
-  overflow: none;
-  border: none;
+@keyframes blink {
+  0% {
+    color: #0009ec;
+  }
+
+  30% {
+    color: #786df3;
+  }
+  50% {
+    color: #32cd30;
+  }
+  80% {
+    color: white;
+  }
+  100% {
+    color: rgba(245, 192, 56, 1);
+  }
 }
 
-.cardText {
-  padding: 1rem;
-}
-
-.card img {
-  display: block;
-  width: 100%;
-  height: auto;
-  border-radius: 4px 4px 0 0;
-  margin-bottom: 12px;
-  border: none;
-}
-
-.card:hover,
-.card:focus,
-.card:active {
-  background-color: #272c34;
-  opacity: 80%;
-}
-
-.card h2 {
-  margin: 0 0 0.75rem 0;
-}
-
-.card p {
-  margin: 0;
-  font-size: 1rem;
-  line-height: 1.75;
-}
-
-.logo {
-  height: 1em;
-  margin-left: 0.5rem;
+.headingTxt > span {
+  animation: blink 2s infinite;
 }
 
 @media (max-width: 768px) {
-  .header {
-    margin-left: 0;
+  .container {
+    padding: 10px 0px;
   }
-  .grid {
-    width: 100%;
-    flex-direction: column;
-  }
-  .title {
-    font-size: 3rem;
-    line-height: 1.15;
-  }
-}
 
-.card,
-.footer {
-  border-color: #222;
-}
-.logo img {
-  filter: invert(1);
+  .headingSection {
+    border: 1px solid blue;
+    width: 100%;
+    height: 25vh;
+  }
+
+  .headingTxt {
+    font-size: 20px;
+  }
+
+  .para {
+    font-size: 10px;
+  }
+
+  .headingSection img {
+    height: 100%;
+  }
+
+  .headLine {
+    top: 70px;
+    right: 50px;
+  }
+
+  .alien {
+    width: 150px;
+  }
 }

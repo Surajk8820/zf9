@@ -1,6 +1,5 @@
 import { ConnectWallet } from "@thirdweb-dev/react";
 import styles from "../styles/Home.module.css";
-import Image from "next/image";
 import { NextPage } from "next";
 import {
   Box,
@@ -15,13 +14,15 @@ import {
   TabPanel,
 } from "@chakra-ui/react";
 import TabCard from "../components/TabCard";
+import Image from "next/image";
 
 const Home: NextPage = () => {
   return (
     <Box className={styles.container}>
       <Box className={styles.headingSection}>
-        <img
-          width={"100%"}
+        <Image
+          width={1500}
+          height={1500}
           src="https://imgur.com/d47svBB.png"
           alt="seaction_logo"
         />

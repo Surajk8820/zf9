@@ -1,13 +1,15 @@
 import React from "react";
 import styles from "../styles/Footer.module.css";
 import { Box, Flex, Text } from "@chakra-ui/react";
+import Image from "next/image";
 
 const Footer = () => {
   return (
     <Flex className={styles.footerContainer}>
       <Box>
-        <img
-          width={"250px"}
+        <Image
+          width={200}
+          height={200}
           src="https://zuraverse.xyz/wp-content/uploads/2020/10/V5.png"
           alt="logo"
         />

@@ -36,6 +36,7 @@ import {
   SunIcon,
 } from "@chakra-ui/icons";
 import styles from "../styles/Navbar.module.css";
+import Image from "next/image";
 
 const Navbar = () => {
   const address = useAddress();
@@ -48,8 +49,9 @@ const Navbar = () => {
         <Flex alignItems={"center"} justifyContent={"space-between"}>
           <Flex alignItems={"center"} justifyContent={"center"} gap={"5px"}>
             <Box>
-              <img
-                width={"120px"}
+              <Image
+                width={150}
+                height={150}
                 src="https://zuraverse.xyz/wp-content/uploads/2020/10/V5.png"
                 alt="logo"
               />
@@ -105,11 +107,14 @@ const Navbar = () => {
                     w={"100%"}
                     justifyContent={"space-between"}
                     alignItems={"center"}
+                    onClick={toggleColorMode}
                   >
-                    <Text>Dark Mode</Text>
-                    <Button onClick={toggleColorMode}>
+                    <Text>
+                      Dark Mode {colorMode === "light" ? "(OFF)" : "(ON)"}
+                    </Text>
+                    <Box>
                       {colorMode === "light" ? <MoonIcon /> : <SunIcon />}
-                    </Button>
+                    </Box>
                   </Flex>
                 </MenuItem>
               </MenuList>

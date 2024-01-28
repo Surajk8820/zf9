@@ -5,7 +5,7 @@ import NFTGrid from "../components/NFTGrid";
 import { NFT_COLLECTION_ADDRESS } from "../const/addresses";
 import { useContract, useNFTs } from "@thirdweb-dev/react";
 
-const buy = () => {
+const Buy = () => {
   const { contract } = useContract(NFT_COLLECTION_ADDRESS);
   const { data, isLoading } = useNFTs(contract);
 
@@ -18,4 +18,4 @@ const buy = () => {
   );
 };
 
-export default buy;
+export default Buy;

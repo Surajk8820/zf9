@@ -20,16 +20,16 @@ const Footer = () => {
           <Text>Marketplace</Text>
           <Box className={styles.links}>
             <a href="">Popular collections</a>
-            <a href="">Art's</a>
+            <a href="">{"Art's"}</a>
             <a href="">Gaming</a>
-            <a href="">PFP's</a>
+            <a href="">{"PFP's"}</a>
           </Box>
         </Flex>
         <Flex>
           <Text>Company</Text>
           <Box className={styles.links}>
             <a href="">About Us</a>
-            <a href="">Carrer's</a>
+            <a href="">{"Carrer's"}</a>
             <a href="">Ventures</a>
             <a href="">Grants</a>
           </Box>
@@ -38,7 +38,7 @@ const Footer = () => {
           <Text>Resources</Text>
           <Box className={styles.links}>
             <a href="">About Us</a>
-            <a href="">Carrer's</a>
+            <a href="">{"Carrer's"}</a>
             <a href="">Ventures</a>
             <a href="">Grants</a>
           </Box>
@@ -47,7 +47,7 @@ const Footer = () => {
           <Text>NFTs</Text>
           <Box className={styles.links}>
             <a href="">About Us</a>
-            <a href="">Carrer's</a>
+            <a href="">{"Carrer's"}</a>
             <a href="">Ventures</a>
             <a href="">Grants</a>
           </Box>

@@ -29,7 +29,7 @@ const Navbar = () => {
 
   return (
     <>
-      <Box bg={useColorModeValue("gray.100", "gray.900")} p={2} px={4}>
+      <Box bg={"#141414"} color={'white'} p={2} px={4}>
         <Flex alignItems={"center"} justifyContent={"space-between"}>
           <Flex alignItems={"center"} justifyContent={"center"} gap={"5px"}>
             <Box>

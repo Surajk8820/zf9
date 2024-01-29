@@ -49,7 +49,7 @@ export default function NFTComponent({ nft }: Props) {
       <Text mt={2} fontSize={"small"} color={"darkgray"}>
         Token ID #{nft.metadata.id}
       </Text>
-      <Text fontSize={{ base: "12px", md: "bold" }}>{nft.metadata.name}</Text>
+      <Text fontWeight={800} fontSize={{ base: "12px", md: "16px" }}>{nft.metadata.name}</Text>
 
       <Box>
         {loadingMarketplace || loadingDirectListing || loadingAuction ? (

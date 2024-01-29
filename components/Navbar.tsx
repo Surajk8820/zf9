@@ -22,17 +22,24 @@ import {
 import { Search2Icon } from "@chakra-ui/icons";
 import styles from "../styles/Navbar.module.css";
 import Image from "next/image";
+import { useRouter } from "next/router";
 
 const Navbar = () => {
   const address = useAddress();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const router = useRouter();
+
+  const redirectToHome = () => {
+    // redirecting to home
+    router.push("/");
+  };
 
   return (
     <>
-      <Box bg={"#141414"} color={'white'} p={2} px={4}>
+      <Box bg={"#141414"} color={"white"} p={2} px={4}>
         <Flex alignItems={"center"} justifyContent={"space-between"}>
           <Flex alignItems={"center"} justifyContent={"center"} gap={"5px"}>
-            <Box>
+            <Box onClick={redirectToHome} cursor={"pointer"}>
               <Image
                 width={150}
                 height={150}
@@ -61,7 +68,7 @@ const Navbar = () => {
               </Box>
             </HStack>
           </HStack>
-          <Flex alignItems={"center"} justifyContent={"center"} gap={5}>
+          <Flex alignItems={"center"} justifyContent={"center"} gap={2}>
             <Box className={styles.connectWallet}>
               <ConnectWallet />
             </Box>

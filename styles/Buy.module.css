@@ -2,4 +2,61 @@
 
 .container {
   font-family: "Poppins", sans-serif;
+  border: 1px solid #141414;
+  background-color: #141414;
+  color: white;
+  /* border: 1px solid red; */
+}
+
+.banner {
+  width: "100%";
+  height: 318px;
+  background-image: url("https://imgur.com/jwMnRzW.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+.detailsDiv {
+  /* border: 1px solid red; */
+  width: 100%;
+  height: fit-content;
+  font-family: "Poppins", sans-serif;
+}
+
+.detailsDiv > div {
+  /* border: 1px solid red; */
+  width: 30%;
+  height: 40vh;
+}
+
+.collectionImg {
+  /* border: 1px solid red; */
+  margin-top: -200px;
+}
+
+.detailsDiv > div:nth-child(1) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.detailsDiv > div:nth-child(2) {
+  width: 100%;
+  padding: 30px;
+}
+
+@media (max-width: 768px) {
+  .detailsDiv {
+    flex-direction: column;
+  }
+
+  .detailsDiv > div {
+    width: 100%;
+    height: fit-content;
+  }
+
+  .collectionImg{
+    margin-top: -120px;
+  }
 }

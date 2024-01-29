@@ -20,7 +20,7 @@ export default function NFTGrid({
 }: Props) {
   return (
     <Grid
-      templateColumns={{ base: "repeat(2, 1fr)", md: "repeat(4, 1fr)" }}
+      templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(5, 1fr)" }}
       gap={8}
       w={"100%"}
       padding={2.5}

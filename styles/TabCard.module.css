@@ -7,7 +7,7 @@
   cursor: pointer;
 }
 
-.cardContainer:hover{
+.cardContainer:hover {
   animation: rotateOutlines 3s infinite linear;
 }
 
@@ -21,8 +21,11 @@
   66% {
     outline: 3px solid rgb(0, 0, 255);
   }
+  88% {
+    outline: 3px solid rgb(255, 0, 255);
+  }
   100% {
-    outline: 3px solid rgb(255, 0, 0);
+    outline: 3px solid rgb(255, 255, 0);
   }
 }
 

@@ -1,21 +1,28 @@
 import React from "react";
 import styles from "../styles/Footer.module.css";
-import { Box, Flex, Text } from "@chakra-ui/react";
+import { Box, Flex, Text, Grid } from "@chakra-ui/react";
 import Image from "next/image";
 
 const Footer = () => {
   return (
     <Flex className={styles.footerContainer}>
-      <Box>
+      <Flex
+        m={"auto"}
+        flexDir={"column"}
+        justifyContent={"center"}
+        alignItems={"center"}
+      >
         <Image
           width={200}
           height={200}
           src="https://zuraverse.xyz/wp-content/uploads/2020/10/V5.png"
           alt="logo"
         />
-        <Text mt={5} color={'grey'}>©2023 Zuraverse, All Rights Reserved.</Text>
-      </Box>
-      <Flex className={styles.linksDiv}>
+        <Text mt={5} color={"grey"}>
+          ©2023 Zuraverse, All Rights Reserved.
+        </Text>
+      </Flex>
+      <Grid className={styles.linksDiv}>
         <Flex>
           <Text>Marketplace</Text>
           <Box className={styles.links}>
@@ -52,7 +59,7 @@ const Footer = () => {
             <a href="">Grants</a>
           </Box>
         </Flex>
-      </Flex>
+      </Grid>
     </Flex>
   );
 };

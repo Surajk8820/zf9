@@ -40,6 +40,7 @@ export default function NFTComponent({ nft }: Props) {
     <Flex className={styles.container}>
       <Box borderRadius={"4px"} overflow={"hidden"}>
         <ThirdwebNftMedia
+          className={styles.imgContainer}
           metadata={nft.metadata}
           height={"100%"}
           width={"100%"}
@@ -48,7 +49,7 @@ export default function NFTComponent({ nft }: Props) {
       <Text mt={2} fontSize={"small"} color={"darkgray"}>
         Token ID #{nft.metadata.id}
       </Text>
-      <Text fontWeight={"bold"}>{nft.metadata.name}</Text>
+      <Text fontSize={{ base: "12px", md: "bold" }}>{nft.metadata.name}</Text>
 
       <Box>
         {loadingMarketplace || loadingDirectListing || loadingAuction ? (
@@ -56,9 +57,9 @@ export default function NFTComponent({ nft }: Props) {
         ) : directListing && directListing[0] ? (
           <Box>
             <Flex direction={"column"}>
-              <Text fontSize={"small"}>Price</Text>
+              <Text fontSize={{ base: "8px" }}>Price</Text>
               <Text
-                fontSize={"small"}
+                fontSize={{ base: "10px", md: "14px" }}
               >{`${directListing[0]?.currencyValuePerToken.displayValue} ${directListing[0]?.currencyValuePerToken.symbol}`}</Text>
             </Flex>
           </Box>
@@ -74,8 +75,8 @@ export default function NFTComponent({ nft }: Props) {
         ) : (
           <Box>
             <Flex direction={"column"}>
-              <Text fontSize={"small"}>Price</Text>
-              <Text fontSize={"small"}>Not Listed</Text>
+              <Text fontSize={{ base: "8px", md: "14px" }}>Price</Text>
+              <Text fontSize={{ base: "8px", md: "14px" }}>Not Listed</Text>
             </Flex>
           </Box>
         )}

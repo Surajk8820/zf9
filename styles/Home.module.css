@@ -68,7 +68,6 @@
   }
 
   .headingSection {
-    border: 1px solid blue;
     width: 100%;
     height: 25vh;
   }
@@ -90,7 +89,12 @@
     right: 50px;
   }
 
-  .alien {
-    width: 150px;
+  .grid {
+    grid-template-columns: repeat(1, 1fr);
+    gap: 30px;
+  }
+
+  .headLine{
+    display: none;
   }
 }

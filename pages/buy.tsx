@@ -11,8 +11,10 @@ const Buy = () => {
 
   return (
     <Container maxW={"100%"} minH={"70vh"} className={styles.container}>
-      <Heading>Collections</Heading>
-      <Text>Buy NFTs from this collection.</Text>
+      <Heading mt={2} size={{ base: "md", md: "lg" }}>Collections</Heading>
+      <Text color={"grey"} fontSize={{ base: "12px", md: "16px" }}>
+        Buy NFTs from this collection.
+      </Text>
       <NFTGrid isLoading={isLoading} data={data} emptyText={"No NFTs found"} />
     </Container>
   );

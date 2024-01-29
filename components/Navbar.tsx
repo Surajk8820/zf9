@@ -37,11 +37,13 @@ import {
 } from "@chakra-ui/icons";
 import styles from "../styles/Navbar.module.css";
 import Image from "next/image";
+import { useRouter } from "next/router";
 
 const Navbar = () => {
   const address = useAddress();
   const { colorMode, toggleColorMode } = useColorMode();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const route = useRouter()
 
   return (
     <>

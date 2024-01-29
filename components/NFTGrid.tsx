@@ -1,5 +1,5 @@
 import type { NFT as NFTType } from "@thirdweb-dev/sdk";
-import { SimpleGrid, Skeleton, Text } from "@chakra-ui/react";
+import { Grid, Skeleton, Text } from "@chakra-ui/react";
 import React from "react";
 import NFT from "./NFT";
 import Link from "next/link";
@@ -19,7 +19,13 @@ export default function NFTGrid({
   emptyText = "Sorry🙂, No NFTs found",
 }: Props) {
   return (
-    <SimpleGrid columns={4} spacing={6} w={"100%"} padding={2.5} my={5}>
+    <Grid
+      templateColumns={{ base: "repeat(2, 1fr)", md: "repeat(4, 1fr)" }}
+      gap={8}
+      w={"100%"}
+      padding={2.5}
+      my={5}
+    >
       {isLoading ? (
         [...Array(20)].map((_, index) => (
           <Skeleton key={index} height={"312px"} width={"100%"} />
@@ -45,6 +51,6 @@ export default function NFTGrid({
       ) : (
         <Text>{emptyText}</Text>
       )}
-    </SimpleGrid>
+    </Grid>
   );
 }

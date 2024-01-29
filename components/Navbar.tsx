@@ -5,9 +5,7 @@ import {
   Avatar,
   Box,
   Flex,
-  Heading,
   Link,
-  Text,
   Button,
   Menu,
   MenuButton,
@@ -16,34 +14,18 @@ import {
   MenuDivider,
   useDisclosure,
   useColorModeValue,
-  Stack,
-  useColorMode,
-  Center,
-  IconButton,
   HStack,
   Input,
   InputGroup,
   InputLeftElement,
 } from "@chakra-ui/react";
-import {
-  AddIcon,
-  CloseIcon,
-  HamburgerIcon,
-  MoonIcon,
-  PhoneIcon,
-  Search2Icon,
-  SearchIcon,
-  SunIcon,
-} from "@chakra-ui/icons";
+import { Search2Icon } from "@chakra-ui/icons";
 import styles from "../styles/Navbar.module.css";
 import Image from "next/image";
-import { useRouter } from "next/router";
 
 const Navbar = () => {
   const address = useAddress();
-  const { colorMode, toggleColorMode } = useColorMode();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const route = useRouter()
 
   return (
     <>
@@ -104,21 +86,6 @@ const Navbar = () => {
                 <MenuItem>Link 2</MenuItem>
                 <MenuDivider />
                 <MenuItem>Link 3</MenuItem>
-                <MenuItem>
-                  <Flex
-                    w={"100%"}
-                    justifyContent={"space-between"}
-                    alignItems={"center"}
-                    onClick={toggleColorMode}
-                  >
-                    <Text>
-                      Dark Mode {colorMode === "light" ? "(OFF)" : "(ON)"}
-                    </Text>
-                    <Box>
-                      {colorMode === "light" ? <MoonIcon /> : <SunIcon />}
-                    </Box>
-                  </Flex>
-                </MenuItem>
               </MenuList>
             </Menu>
           </Flex>

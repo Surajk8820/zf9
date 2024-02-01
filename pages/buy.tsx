@@ -1,39 +1,95 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styles from "../styles/Buy.module.css";
-import { Container, Heading, Input, Text, Box, Flex } from "@chakra-ui/react";
+import {
+  Heading,
+  Text,
+  Box,
+  Flex,
+  Tabs,
+  TabList,
+  TabPanels,
+  Tab,
+  TabPanel,
+  Divider,
+  Input,
+  InputGroup,
+  InputLeftElement,
+  Select,
+} from "@chakra-ui/react";
 import NFTGrid from "../components/NFTGrid";
 import { NFT_COLLECTION_ADDRESS } from "../const/addresses";
 import { useContract, useNFTs } from "@thirdweb-dev/react";
 import Image from "next/image";
+import { Search2Icon } from "@chakra-ui/icons";
+import { BsFillGrid3X3GapFill, BsFillGridFill } from "react-icons/bs";
+
+interface NFTMetadata {
+  name: string;
+  description?: string;
+  image?: string;
+  external_link?: string;
+}
 
 const Buy = () => {
   const { contract } = useContract(NFT_COLLECTION_ADDRESS);
   const { data, isLoading } = useNFTs(contract);
+  const [searchText, setSearch] = useState<string>("");
+  const [filteredData, setFilteredData] = useState<NFTMetadata[]>([]);
+  const [collectionMetadata, setCollectionMetadata] = useState<NFTMetadata[]>(
+    []
+  );
+  const [gridCount, setGridCount] = useState<number>(5);
 
-  console.log(contract);
+  // const handleSearch = () => {
+  //   if(data !== undefined && searchText !== ""){
+  //      let filteredItems = data.filter((item, index) => {
+  //       return item?.metadata?.name?.toLowerCase().includes(searchText.toLowerCase());
+  //     });
+  //     setFilteredData(filteredItems);
+  //   } else {
+  //     setFilteredData([]);
+  //   }
+  //   }
+  // };
 
+  // const renderData = searchText !== "" ? filteredData : data;
+
+  // useEffect(() => {
+  //   const getData = async () => {
+  //     const dq = await contract?.metadata.get();
+  //     setCollectionMetadata(dq ?? {});
+  //   };
+  //   getData();
+  // }, []);
+
+  const handleGridDisplay = () => {
+    if (gridCount === 5) {
+      setGridCount(3);
+      return;
+    }
+    setGridCount(5);
+  };
+
+  // console.log(collectionMetadata);
   return (
     <Box w={"100%"} minH={"70vh"} className={styles.container}>
-      {/* <Heading mt={2} size={{ base: "md", md: "lg" }}>Collections</Heading>
-      <Text color={"grey"} fontSize={{ base: "12px", md: "16px" }}>
-        Buy NFTs from this collection.
-      </Text>
-      <Box border={'1px soild red'}>
-        fffff
-      </Box> */}
       <Box className={styles.banner}></Box>
       <Flex className={styles.detailsDiv}>
         <Box>
-          <Image
+          <video
             className={styles.collectionImg}
-            width={250}
-            height={250}
-            src="https://imgur.com/jRBpdIT.png"
-            alt="logo"
-          />
+            width="250"
+            height="240"
+            autoPlay
+            loop
+            preload={"auto"}
+            controls
+          >
+            <source src="https://imgur.com/PMUg3KZ.mp4" type="video/mp4" />
+          </video>
         </Box>
         <Box>
-          <Heading>Hippie Alien Cosmic Club</Heading>
+          <Heading>{"Hippie Aliens Cosmic Club"}</Heading>
           <Flex gap={5}>
             <Text mt={2}>
               by{" "}
@@ -54,16 +110,95 @@ const Buy = () => {
             Description
           </Text>
           <Text mt={2} color={"grey"} fontSize={14}>
-            Hey Hippie Aliens{" "}
+            {"zuraverse"}
           </Text>
         </Box>
       </Flex>
-      <Box p={"0px 30px"}>
-        <NFTGrid
-          isLoading={isLoading}
-          data={data}
-          emptyText={"No NFTs found"}
-        />
+      <Box className={styles.searchDiv}>
+        <Tabs variant="unstyled">
+          <Flex alignItems={"center"} gap={4} justifyContent={"space-between"}>
+            <TabList gap={7}>
+              <Tab
+                _selected={{ color: "white", bg: "blue", borderRadius: "5px" }}
+              >
+                Items
+              </Tab>
+              <Tab
+                _selected={{ color: "white", bg: "blue", borderRadius: "5px" }}
+              >
+                Activity
+              </Tab>
+              <Tab
+                _selected={{ color: "white", bg: "blue", borderRadius: "5px" }}
+              >
+                Analytics
+              </Tab>
+            </TabList>
+            <Box w={"50%"}>
+              <InputGroup>
+                <InputLeftElement h={"100%"} pointerEvents="none">
+                  <Search2Icon fontSize={"12px"} color="gray.300" />
+                </InputLeftElement>
+                <Input
+                  focusBorderColor="none"
+                  border={"none"}
+                  background={"#1c1c20"}
+                  width={{ base: "5px", md: "100%" }}
+                  borderRadius={"5px"}
+                  type="text"
+                  placeholder="Search items by name, attributes"
+                  onChange={(e) => setSearch(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.keyCode === 13) {
+                    }
+                  }}
+                />
+              </InputGroup>{" "}
+            </Box>
+            <Flex alignItems={"center"} gap={2}>
+              <Box>
+                <Select borderColor={"#373737"}>
+                  <option value="">Price: low to high</option>
+                  <option value="">Price: high to low</option>
+                </Select>
+              </Box>
+              <Flex
+                alignItems={"center"}
+                justifyContent={"center"}
+                border={"1px solid grey"}
+                borderRadius={"5px"}
+                w={"40px"}
+                h={"40px"}
+                onClick={handleGridDisplay}
+              >
+                {gridCount === 5 ? (
+                  <BsFillGrid3X3GapFill size={"24px"} />
+                ) : (
+                  <BsFillGridFill size={"24px"} />
+                )}
+              </Flex>
+            </Flex>
+          </Flex>
+          <Divider mt={4} orientation="horizontal" />
+          <TabPanels>
+            <TabPanel mt={4} p={0}>
+              <Box>
+                <NFTGrid
+                  gridCount={gridCount}
+                  isLoading={isLoading}
+                  data={data}
+                  emptyText={"No NFTs found"}
+                />
+              </Box>
+            </TabPanel>
+            <TabPanel>
+              <p>This is activity tab!</p>
+            </TabPanel>
+            <TabPanel>
+              <p>This is Analytics Tab!</p>
+            </TabPanel>
+          </TabPanels>
+        </Tabs>
       </Box>
     </Box>
   );

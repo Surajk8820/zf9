@@ -13,6 +13,7 @@
 
 .imgContainer {
   transition: 0.5s ease-in-out;
+  object-fit: contain;
 }
 
 .imgContainer:hover {

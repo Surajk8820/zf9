@@ -49,17 +49,19 @@ export default function NFTComponent({ nft }: Props) {
       <Text mt={2} fontSize={"small"} color={"darkgray"}>
         Token ID #{nft.metadata.id}
       </Text>
-      <Text fontWeight={800} fontSize={{ base: "12px", md: "16px" }}>{nft.metadata.name}</Text>
+      <Text fontWeight={800} fontSize={{ base: "12px", md: "16px" }}>
+        {nft.metadata.name}
+      </Text>
 
-      <Box>
+      <Box mt={2}>
         {loadingMarketplace || loadingDirectListing || loadingAuction ? (
           <Skeleton></Skeleton>
         ) : directListing && directListing[0] ? (
           <Box>
             <Flex direction={"column"}>
-              <Text fontSize={{ base: "8px" }}>Price</Text>
+              <Text fontSize={{ base: "8px", md: "14px" }}>Price</Text>
               <Text
-                fontSize={{ base: "10px", md: "14px" }}
+                fontSize={{ base: "8px", md: "14px" }}
               >{`${directListing[0]?.currencyValuePerToken.displayValue} ${directListing[0]?.currencyValuePerToken.symbol}`}</Text>
             </Flex>
           </Box>

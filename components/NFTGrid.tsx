@@ -17,14 +17,15 @@ export default function NFTGrid({
   data,
   overrideOnclickBehavior,
   emptyText = "Sorry🙂, No NFTs found",
+  gridCount,
 }: Props) {
   return (
     <Grid
-      templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(5, 1fr)" }}
-      gap={8}
-      w={"100%"}
-      padding={2.5}
-      my={5}
+      templateColumns={{
+        base: `repeat(${1}, 1fr)`,
+        md: `repeat(${gridCount}, 1fr)`,
+      }}
+      gap={6}
     >
       {isLoading ? (
         [...Array(20)].map((_, index) => (

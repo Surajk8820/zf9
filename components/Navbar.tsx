@@ -9,11 +9,7 @@ import {
   Button,
   Menu,
   MenuButton,
-  MenuList,
-  MenuItem,
-  MenuDivider,
   useDisclosure,
-  useColorModeValue,
   HStack,
   Input,
   InputGroup,
@@ -36,7 +32,7 @@ const Navbar = () => {
 
   return (
     <>
-      <Box bg={"#141414"} color={"white"} p={2} px={4}>
+      <Box bg={"#141414"} color={"white"} p={{ base: 2 }} pl={{md : 12, base : ""}} pr={{md : 12, base : ""}}>
         <Flex alignItems={"center"} justifyContent={"space-between"}>
           <Flex alignItems={"center"} justifyContent={"center"} gap={"5px"}>
             <Box onClick={redirectToHome} cursor={"pointer"}>
@@ -88,12 +84,6 @@ const Navbar = () => {
                   )}
                 </Box>
               </MenuButton>
-              <MenuList>
-                <MenuItem>Link 1</MenuItem>
-                <MenuItem>Link 2</MenuItem>
-                <MenuDivider />
-                <MenuItem>Link 3</MenuItem>
-              </MenuList>
             </Menu>
           </Flex>
         </Flex>

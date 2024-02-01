@@ -43,7 +43,7 @@ const TabCard = () => {
               <Box className={styles.imgDiv}>
                 <Image width={600} height={600} src={e.image} alt="" />
               </Box>
-              <Box mt={3}>
+              <Box mt={2} pl={2}>
                 <Text fontSize={"20px"}>{e.collectionName}</Text>
                 <Text color={"grey"}>Zuraverse</Text>
               </Box>

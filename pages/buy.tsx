@@ -62,6 +62,8 @@ const Buy = () => {
   //   getData();
   // }, []);
 
+
+
   const handleGridDisplay = () => {
     if (gridCount === 5) {
       setGridCount(3);

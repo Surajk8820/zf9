@@ -10,6 +10,7 @@ type Props = {
   data: NFTType[] | undefined;
   overrideOnclickBehavior?: (nft: NFTType) => void;
   emptyText?: string;
+  gridCount?: number;
 };
 
 export default function NFTGrid({

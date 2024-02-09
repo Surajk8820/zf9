@@ -18,6 +18,7 @@ import {
   MediaRenderer,
   ThirdwebNftMedia,
   Web3Button,
+  useActiveClaimCondition,
   useContract,
   useMinimumNextBid,
   useValidDirectListings,
@@ -57,6 +58,10 @@ export default function TokenPage({ nft, contractMetadata }: Props) {
   );
 
   const { contract: nftCollection } = useContract(HASH_NFT_COLLECTION_ADDRESS);
+
+  // Add for active claim conditions
+  const { data: activeClaimCondition, isLoading: isLoadingClaimCondition } =
+    useActiveClaimCondition(nftCollection, nft.metadata.id);
 
   const { data: directListing, isLoading: loadingDirectListing } =
     useValidDirectListings(marketplace, {
@@ -116,9 +121,6 @@ export default function TokenPage({ nft, contractMetadata }: Props) {
     return txResult;
   }
 
-  const router = useRouter();
-  console.log(router.query.contractAddress);
-
   return (
     <Box className={styles.container} m={"auto"}>
       <SimpleGrid columns={{ base: 1, md: 2 }} spacing={{ base: 10, md: 20 }}>
@@ -139,6 +141,18 @@ export default function TokenPage({ nft, contractMetadata }: Props) {
           <Box>
             <Text fontWeight={"bold"}>Description:</Text>
             <Text>{nft.metadata.description}</Text>
+          </Box>
+          <Box>
+            {activeClaimCondition ? (
+              <Flex justify={"space-between"}>
+                <Box borderRadius={'5px'} border={'1px solid grey'} p={"5px 10px"} textAlign={"center"}>
+                  <Text>Supply</Text>
+                  <Text>{`${activeClaimCondition?.availableSupply}/${activeClaimCondition?.maxClaimableSupply}`}</Text>
+                </Box>
+              </Flex>
+            ) : (
+              <Skeleton></Skeleton>
+            )}
           </Box>
           <Box className={styles.buyBtn}>
             <Web3Button

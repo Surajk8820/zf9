@@ -23,6 +23,7 @@ export default function NFTComponent({ nft }: Props) {
     "marketplace-v3"
   );
 
+
   const { data: directListing, isLoading: loadingDirectListing } =
     useValidDirectListings(marketplace, {
       tokenContract: HASH_NFT_COLLECTION_ADDRESS,
@@ -35,6 +36,7 @@ export default function NFTComponent({ nft }: Props) {
       tokenContract: HASH_NFT_COLLECTION_ADDRESS,
       tokenId: nft.metadata.id,
     });
+
 
   return (
     <Flex className={styles.container}>
@@ -54,7 +56,7 @@ export default function NFTComponent({ nft }: Props) {
       </Text>
 
       <Box mt={2}>
-        {loadingMarketplace || loadingDirectListing || loadingAuction ? (
+        {loadingMarketplace || loadingDirectListing || loadingAuction ?  (
           <Skeleton></Skeleton>
         ) : directListing && directListing[0] ? (
           <Box>

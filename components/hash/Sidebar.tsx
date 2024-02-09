@@ -34,12 +34,18 @@ import {
 } from "react-icons/fi";
 import { IconType } from "react-icons";
 import { ConnectWallet, useAddress } from "@thirdweb-dev/react";
-import styles from "../styles/Sidebar.module.css";
+import styles from "../../styles/Sidebar.module.css";
 import Image from "next/image";
 import { MdContentCopy } from "react-icons/md";
 import { TbPointFilled } from "react-icons/tb";
-import { HASH_NFT_COLLECTION_ADDRESS } from "../../const/addresses";
 import { EditModal } from "./EditModal";
+import {
+  MARKETPLACE_ADDRESS,
+  HASH_NFT_COLLECTION_ADDRESS,CONZURA_NFT_COLLECTION_ADDRESS
+} from "../../const/addresses";
+import { useRouter } from "next/router";
+import NFTGrid from "../../components/hash/NFTGrid";
+import { useContract, useOwnedNFTs } from "@thirdweb-dev/react";
 
 interface LinkItemProps {
   name: string;
@@ -171,10 +177,27 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
 };
 
 const SidebarWithHeader = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const address = useAddress();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const router = useRouter();
+  const { contract: nftCollection } = useContract(HASH_NFT_COLLECTION_ADDRESS);
 
-  console.log(address);
+
+  const { contract: marketplace } = useContract(
+    MARKETPLACE_ADDRESS,
+    "marketplace-v3"
+  );
+
+  const { data: ownedNfts, isLoading: loadingOwnedNfts } = useOwnedNFTs(
+    nftCollection,
+    router.query.address as string
+  );
+
+  interface NFT {
+    id: number;
+    name: string;
+  }
+
 
   return (
     <Box minH="100vh" bg={"#141414"} color="white">
@@ -224,47 +247,17 @@ const SidebarWithHeader = () => {
             </Text>
           </Box>
         </Box>
-        <Box className={styles.neftsDiv}></Box>
+        <Box className={styles.neftsDiv}>
+          <NFTGrid
+            data={ownedNfts}
+            isLoading={loadingOwnedNfts}
+            emptyText={"You don't own any NFTs yet from this collection."}
+            gridCount={4}
+          />
+        </Box>
       </Box>
     </Box>
   );
 };
 
 export default SidebarWithHeader;
-
-{
-  /* <NFTGrid
-data={ownedNfts}
-isLoading={loadingOwnedNfts}
-emptyText={"You don't own any NFTs yet from this collection."}
-gridCount={4}
-/>
-
-const { isOpen, onOpen, onClose } = useDisclosure();
-const router = useRouter();
-const { contract: nftCollection } = useContract(HASH_NFT_COLLECTION_ADDRESS);
-
-const { contract: marketplace } = useContract(
-  MARKETPLACE_ADDRESS,
-  "marketplace-v3"
-);
-
-const { data: ownedNfts, isLoading: loadingOwnedNfts } = useOwnedNFTs(
-  nftCollection,
-  router.query.address as string
-);
-
-interface NFT {
-  id: number;
-  name: string;
-}
-
-
-import {
-  MARKETPLACE_ADDRESS,
-  HASH_NFT_COLLECTION_ADDRESS,
-} from "../const/addresses";
-import { useRouter } from "next/router";
-import NFTGrid from "../components/NFTGrid";
-import { useContract, useOwnedNFTs } from "@thirdweb-dev/react"; */
-}

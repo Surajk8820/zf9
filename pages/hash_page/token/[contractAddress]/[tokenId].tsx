@@ -27,11 +27,12 @@ import { NFT, ThirdwebSDK } from "@thirdweb-dev/sdk";
 import React, { useState } from "react";
 import {
   MARKETPLACE_ADDRESS,
-  NFT_COLLECTION_ADDRESS,
-} from "../../../const/addresses";
+  HASH_NFT_COLLECTION_ADDRESS,
+} from "../../../../const/addresses";
 import { GetStaticPaths, GetStaticProps } from "next";
 import Link from "next/link";
-import styles from "../../../styles/TokenPage.module.css";
+import styles from "../../../../styles/TokenPage.module.css";
+import { useRouter } from "next/router";
 
 type Props = {
   nft: NFT;
@@ -55,11 +56,11 @@ export default function TokenPage({ nft, contractMetadata }: Props) {
     "marketplace-v3"
   );
 
-  const { contract: nftCollection } = useContract(NFT_COLLECTION_ADDRESS);
+  const { contract: nftCollection } = useContract(HASH_NFT_COLLECTION_ADDRESS);
 
   const { data: directListing, isLoading: loadingDirectListing } =
     useValidDirectListings(marketplace, {
-      tokenContract: NFT_COLLECTION_ADDRESS,
+      tokenContract: HASH_NFT_COLLECTION_ADDRESS,
       tokenId: nft.metadata.id,
     });
 
@@ -68,7 +69,7 @@ export default function TokenPage({ nft, contractMetadata }: Props) {
 
   const { data: auctionListing, isLoading: loadingAuction } =
     useValidEnglishAuctions(marketplace, {
-      tokenContract: NFT_COLLECTION_ADDRESS,
+      tokenContract: HASH_NFT_COLLECTION_ADDRESS,
       tokenId: nft.metadata.id,
     });
 
@@ -105,7 +106,7 @@ export default function TokenPage({ nft, contractMetadata }: Props) {
       );
     } else if (directListing?.[0]) {
       txResult = await marketplace?.offers.makeOffer({
-        assetContractAddress: NFT_COLLECTION_ADDRESS,
+        assetContractAddress: HASH_NFT_COLLECTION_ADDRESS,
         tokenId: nft.metadata.id,
         totalPrice: bidValue,
       });
@@ -114,6 +115,9 @@ export default function TokenPage({ nft, contractMetadata }: Props) {
     }
     return txResult;
   }
+
+  const router = useRouter();
+  console.log(router.query.contractAddress);
 
   return (
     <Box className={styles.container} m={"auto"}>
@@ -333,7 +337,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
   const sdk = new ThirdwebSDK("mumbai");
 
-  const contract = await sdk.getContract(NFT_COLLECTION_ADDRESS);
+  const contract = await sdk.getContract(HASH_NFT_COLLECTION_ADDRESS);
 
   const nft = await contract.erc1155.get(tokenId);
 
@@ -355,14 +359,14 @@ export const getStaticProps: GetStaticProps = async (context) => {
 export const getStaticPaths: GetStaticPaths = async () => {
   const sdk = new ThirdwebSDK("mumbai");
 
-  const contract = await sdk.getContract(NFT_COLLECTION_ADDRESS);
+  const contract = await sdk.getContract(HASH_NFT_COLLECTION_ADDRESS);
 
-  const nfts = await contract.erc1155.getAll();
+  const nfts = await contract?.erc1155.getAll();
 
   const paths = nfts.map((nft) => {
     return {
       params: {
-        contractAddress: NFT_COLLECTION_ADDRESS,
+        contractAddress: HASH_NFT_COLLECTION_ADDRESS,
         tokenId: nft.metadata.id,
       },
     };

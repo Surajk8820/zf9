@@ -3,7 +3,7 @@ import { Grid, Skeleton, Text } from "@chakra-ui/react";
 import React from "react";
 import NFT from "./NFT";
 import Link from "next/link";
-import { NFT_COLLECTION_ADDRESS } from "../const/addresses";
+import { CONZURA_NFT_COLLECTION_ADDRESS } from "../../const/addresses";
 
 type Props = {
   isLoading: boolean;
@@ -29,14 +29,14 @@ export default function NFTGrid({
       gap={6}
     >
       {isLoading ? (
-        [...Array(20)].map((_, index) => (
+        [...Array(10)].map((_, index) => (
           <Skeleton key={index} height={"312px"} width={"100%"} />
         ))
       ) : data && data.length > 0 ? (
         data.map((nft) =>
           !overrideOnclickBehavior ? (
             <Link
-              href={`/token/${NFT_COLLECTION_ADDRESS}/${nft.metadata.id}`}
+              href={`/conzura_page/token/${CONZURA_NFT_COLLECTION_ADDRESS}/${nft.metadata.id}`}
               key={nft.metadata.id}
             >
               <NFT nft={nft} />

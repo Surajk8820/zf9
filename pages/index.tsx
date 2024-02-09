@@ -15,8 +15,15 @@ import {
 } from "@chakra-ui/react";
 import TabCard from "../components/TabCard";
 import Image from "next/image";
+import { useRouter } from "next/router";
 
 const Home: NextPage = () => {
+  const router = useRouter()
+
+  const redirectToConzura = () => {
+   router.push("/conzura")
+  }
+
   return (
     <Box className={styles.container}>
       <Box className={styles.headingSection}>
@@ -60,7 +67,9 @@ const Home: NextPage = () => {
               <TabCard />
             </TabPanel>
             <TabPanel className={styles.grid}>
-              <p>Coming Soon😊!</p>
+              <Box onClick={redirectToConzura} w={'300px'} h={'200px'} border={'1px solid grey'} borderRadius={'15px'}>
+                <Image width={400} height={400} src={'https://imgur.com/KbSB528.png'}  alt="logo"/>
+              </Box>
             </TabPanel>
           </TabPanels>
         </Tabs>

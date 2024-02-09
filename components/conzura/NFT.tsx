@@ -2,8 +2,8 @@ import React from "react";
 import { NFT } from "@thirdweb-dev/sdk";
 import {
   MARKETPLACE_ADDRESS,
-  NFT_COLLECTION_ADDRESS,
-} from "../const/addresses";
+  CONZURA_NFT_COLLECTION_ADDRESS,
+} from "../../const/addresses";
 import {
   ThirdwebNftMedia,
   useContract,
@@ -11,7 +11,7 @@ import {
   useValidEnglishAuctions,
 } from "@thirdweb-dev/react";
 import { Box, Flex, Skeleton, Text } from "@chakra-ui/react";
-import styles from "../styles/NFT.module.css";
+import styles from "../../styles/NFT.module.css";
 
 type Props = {
   nft: NFT;
@@ -25,14 +25,14 @@ export default function NFTComponent({ nft }: Props) {
 
   const { data: directListing, isLoading: loadingDirectListing } =
     useValidDirectListings(marketplace, {
-      tokenContract: NFT_COLLECTION_ADDRESS,
+      tokenContract: CONZURA_NFT_COLLECTION_ADDRESS,
       tokenId: nft.metadata.id,
     });
 
   //Add for auciton section
   const { data: auctionListing, isLoading: loadingAuction } =
     useValidEnglishAuctions(marketplace, {
-      tokenContract: NFT_COLLECTION_ADDRESS,
+      tokenContract: CONZURA_NFT_COLLECTION_ADDRESS,
       tokenId: nft.metadata.id,
     });
 

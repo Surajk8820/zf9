@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import styles from "../styles/Buy.module.css";
+import styles from "../../styles/Buy.module.css";
 import {
   Heading,
   Text,
@@ -16,8 +16,8 @@ import {
   InputLeftElement,
   Select,
 } from "@chakra-ui/react";
-import NFTGrid from "../components/NFTGrid";
-import { NFT_COLLECTION_ADDRESS } from "../const/addresses";
+import NFTGrid from "../../components/conzura/NFTGrid";
+import { CONZURA_NFT_COLLECTION_ADDRESS } from "../../const/addresses";
 import { useContract, useNFTs } from "@thirdweb-dev/react";
 import Image from "next/image";
 import { Search2Icon } from "@chakra-ui/icons";
@@ -30,8 +30,8 @@ interface NFTMetadata {
   external_link?: string;
 }
 
-const Buy = () => {
-  const { contract } = useContract(NFT_COLLECTION_ADDRESS);
+const Conzura = () => {
+  const { contract } = useContract(CONZURA_NFT_COLLECTION_ADDRESS);
   const { data, isLoading } = useNFTs(contract);
   const [searchText, setSearch] = useState<string>("");
   const [filteredData, setFilteredData] = useState<NFTMetadata[]>([]);
@@ -41,14 +41,17 @@ const Buy = () => {
   const [gridCount, setGridCount] = useState<number>(5);
 
   // const handleSearch = () => {
-  //   if(data !== undefined && searchText !== ""){
-  //      let filteredItems = data.filter((item, index) => {
-  //       return item?.metadata?.name?.toLowerCase().includes(searchText.toLowerCase());
-  //     });
+  //   if (data !== undefined && searchText !== "") {
+  //     let filteredItems: NFTMetadata[] = data.filter(
+  //       (item: { metadata?: NFTMetadata }, index: number) => {
+  //         return item?.metadata?.name
+  //           ?.toLowerCase()
+  //           .includes(searchText.toLowerCase());
+  //       }
+  //     );
   //     setFilteredData(filteredItems);
   //   } else {
   //     setFilteredData([]);
-  //   }
   //   }
   // };
 
@@ -62,8 +65,6 @@ const Buy = () => {
   //   getData();
   // }, []);
 
-
-
   const handleGridDisplay = () => {
     if (gridCount === 5) {
       setGridCount(3);
@@ -72,7 +73,6 @@ const Buy = () => {
     setGridCount(5);
   };
 
-  // console.log(collectionMetadata);
   return (
     <Box w={"100%"} minH={"70vh"} className={styles.container}>
       <Box className={styles.banner}></Box>
@@ -167,7 +167,6 @@ const Buy = () => {
               <Flex
                 alignItems={"center"}
                 justifyContent={"center"}
-                border={"1px solid grey"}
                 borderRadius={"5px"}
                 w={"40px"}
                 h={"40px"}
@@ -206,4 +205,4 @@ const Buy = () => {
   );
 };
 
-export default Buy;
+export default Conzura;

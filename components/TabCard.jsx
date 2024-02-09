@@ -8,17 +8,23 @@ const TabCard = () => {
   const router = useRouter();
 
   const handleNavigate = (e) => {
-    if (e.collectionName === "Hippie Alien Cosmic CLub") {
-      router.push("/buy");
-    }else{
-      return alert("Sorry😐, No collection found!")
+    if (e.collectionName === "Hippie Alien Space Hovership") {
+      router.push("/hash_page/hash");
+    } else if (e.collectionName === "Conzura") {
+      router.push("/conzura_page/conzura");
+    } else {
+      return alert("Sorry😐, No collection found!");
     }
   };
 
   let cardData = [
     {
-      image: "https://imgur.com/KbSB528.png",
-      collectionName: "Hippie Alien Cosmic CLub",
+      image: "https://imgur.com/ocpIpjV.png",
+      collectionName: "Hippie Alien Space Hovership",
+    },
+    {
+      image: "https://imgur.com/k6IktDj.png",
+      collectionName: "Conzura",
     },
     {
       image: "https://imgur.com/Prfnh4J.png",

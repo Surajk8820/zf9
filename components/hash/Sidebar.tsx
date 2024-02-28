@@ -38,13 +38,14 @@ import styles from "../../styles/Sidebar.module.css";
 import Image from "next/image";
 import { MdContentCopy } from "react-icons/md";
 import { TbPointFilled } from "react-icons/tb";
-import { EditModal } from "./EditModal";
+import { EditModal } from "../EditModal";
 import {
   MARKETPLACE_ADDRESS,
-  HASH_NFT_COLLECTION_ADDRESS,CONZURA_NFT_COLLECTION_ADDRESS
+  HASH_NFT_COLLECTION_ADDRESS,
+  CONZURA_NFT_COLLECTION_ADDRESS,
 } from "../../const/addresses";
 import { useRouter } from "next/router";
-import NFTGrid from "../../components/hash/NFTGrid";
+import NFTGrid from "./NFTGrid";
 import { useContract, useOwnedNFTs } from "@thirdweb-dev/react";
 
 interface LinkItemProps {
@@ -80,10 +81,12 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
       bg={"black"}
       borderRight="1px"
       borderRightColor={"#444444"}
-      w={{ base: "full", md: 60 }}
+      w={{ base: "full", md: 40 }}
       pos="fixed"
       h="full"
       {...rest}
+      border={"1px solid red"}
+      zIndex={-1}
     >
       <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
         <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold">
@@ -182,7 +185,6 @@ const SidebarWithHeader = () => {
   const router = useRouter();
   const { contract: nftCollection } = useContract(HASH_NFT_COLLECTION_ADDRESS);
 
-
   const { contract: marketplace } = useContract(
     MARKETPLACE_ADDRESS,
     "marketplace-v3"
@@ -197,7 +199,6 @@ const SidebarWithHeader = () => {
     id: number;
     name: string;
   }
-
 
   return (
     <Box minH="100vh" bg={"#141414"} color="white">
@@ -219,7 +220,7 @@ const SidebarWithHeader = () => {
       </Drawer>
       {/* mobilenav */}
       <MobileNav onOpen={onOpen} />
-      <Box className={styles.container} ml={{ base: 0, md: 60 }} p="4">
+      <Box className={styles.container} ml={{ base: 0, md: 20 }} p="4">
         <Box className={styles.profileDiv}>
           <Box className={styles.profile}>
             <Image

@@ -1,0 +1,137 @@
+.container {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  background-color: #141414;
+  color: white;
+}
+
+.sidebar {
+  border-right: 2px solid rgb(55, 55, 55);
+  width: 5%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.logo {
+  margin-top: 20px;
+  cursor: pointer;
+}
+
+.links {
+  margin-top: 50px;
+}
+
+.linkTag {
+  padding: 8px 14px;
+  box-sizing: border-box;
+  border-radius: 5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+}
+
+.linkTag:hover {
+  background-color: blue;
+  color: white;
+}
+
+.main {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  gap: 30px;
+  padding: 30px;
+}
+
+.profileSection {
+  width: 35%;
+  height: fit-content;
+  border-radius: 15px;
+  box-shadow: rgba(63, 63, 252, 0.35) 0px 5px 15px;
+  overflow: hidden;
+}
+
+.coverImg {
+  width: 100%;
+  height: 25vh;
+}
+
+.profileImg {
+  border: 2px solid grey;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  left: 10;
+}
+
+.profileImg > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.emptyNFT{
+  width: 100%;
+  height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.emptyNFT > button{
+  background-color: blue;
+  color: white;
+}
+
+.btn {
+  width: 100%;
+  background-color: blue;
+  color: white;
+  padding: 10px;
+  transition: 0.3s ease-in-out;
+}
+
+.progressbar {
+  margin-bottom: 20px;
+  padding: 0px 20px;
+}
+
+.filledBars {
+  background-color: blue;
+}
+
+.btn:hover {
+  background-color: white;
+  color: black;
+}
+
+.info {
+  margin: 100px;
+  text-align: center;
+}
+
+.nftSection {
+  width: 100%;
+  overflow-y: scroll;
+}
+
+.nftSection::-webkit-scrollbar {
+  display: none;
+}
+
+.nftGrid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 20px;
+}
+
+.nftCard {
+  border: 1px solid grey;
+  height: fit-content;
+  padding: 8px;
+}

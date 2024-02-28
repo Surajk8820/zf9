@@ -14,6 +14,7 @@ import {
   Input,
   InputGroup,
   InputLeftElement,
+  Tooltip,
 } from "@chakra-ui/react";
 import { Search2Icon } from "@chakra-ui/icons";
 import styles from "../styles/Navbar.module.css";
@@ -29,7 +30,6 @@ const Navbar = () => {
     // redirecting to home
     router.push("/");
   };
-
 
   return (
     <>
@@ -90,7 +90,9 @@ const Navbar = () => {
             <Box>
               {address && (
                 <Link as={NextLink} href={`/profile/${address}`}>
-                  <Avatar src="https://bit.ly/broken-link" ml={"10px"} />
+                  <Tooltip hasArrow label={"Profile"}>
+                    <Avatar border={'2px solid #444444'} src="https://imgur.com/752APp1.png" ml={"10px"} />
+                  </Tooltip>
                 </Link>
               )}
             </Box>

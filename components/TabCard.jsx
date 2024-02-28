@@ -12,12 +12,18 @@ const TabCard = () => {
       router.push("/hash_page/hash");
     } else if (e.collectionName === "Conzura") {
       router.push("/conzura_page/conzura");
+    } else if (e.collectionName === "Zura House") {
+      router.push("/house_page/house");
     } else {
       return alert("Sorry😐, No collection found!");
     }
   };
 
   let cardData = [
+    {
+      image: "https://imgur.com/DTL8kUW.png",
+      collectionName: "Zura House",
+    },
     {
       image: "https://imgur.com/ocpIpjV.png",
       collectionName: "Hippie Alien Space Hovership",

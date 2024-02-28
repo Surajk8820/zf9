@@ -1,0 +1,7 @@
+.form > div  input{
+    border: 1px solid grey;
+}
+
+.form > div{
+    margin-top: 10px;
+}

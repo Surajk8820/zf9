@@ -1,9 +1,7 @@
 import {
   Avatar,
   Box,
-  Container,
   Flex,
-  Input,
   SimpleGrid,
   Skeleton,
   Stack,
@@ -19,8 +17,9 @@ import {
   ThirdwebNftMedia,
   Web3Button,
   useActiveClaimCondition,
+  useAddress,
+  useClaimNFT,
   useContract,
-  useMinimumNextBid,
   useValidDirectListings,
   useValidEnglishAuctions,
 } from "@thirdweb-dev/react";
@@ -28,13 +27,13 @@ import { NFT, ThirdwebSDK } from "@thirdweb-dev/sdk";
 import React, { useState } from "react";
 import {
   MARKETPLACE_ADDRESS,
-  HASH_NFT_COLLECTION_ADDRESS,
+  HOUSE_NFT_COLLECTION_ADDRESS,
 } from "../../../../const/addresses";
 import { GetStaticPaths, GetStaticProps } from "next";
 import Link from "next/link";
 import styles from "../../../../styles/TokenPage.module.css";
 import { useRouter } from "next/router";
-import { ethers } from "ethers";
+
 
 type Props = {
   nft: NFT;
@@ -58,7 +57,8 @@ export default function TokenPage({ nft, contractMetadata }: Props) {
     "marketplace-v3"
   );
 
-  const { contract: nftCollection } = useContract(HASH_NFT_COLLECTION_ADDRESS);
+  const { contract: nftCollection } = useContract(HOUSE_NFT_COLLECTION_ADDRESS);
+  const address = useAddress();
 
   // Add for active claim conditions
   const { data: activeClaimCondition, isLoading: isLoadingClaimCondition } =
@@ -66,16 +66,23 @@ export default function TokenPage({ nft, contractMetadata }: Props) {
 
   const { data: directListing, isLoading: loadingDirectListing } =
     useValidDirectListings(marketplace, {
-      tokenContract: HASH_NFT_COLLECTION_ADDRESS,
+      tokenContract: HOUSE_NFT_COLLECTION_ADDRESS,
       tokenId: nft.metadata.id,
     });
+
+  // claim NFT's
+  const {
+    mutateAsync: claimNft,
+    isLoading,
+    error,
+  } = useClaimNFT(nftCollection);
 
   //Add these for auction section
   const [bidValue, setBidValue] = useState<string>();
 
   const { data: auctionListing, isLoading: loadingAuction } =
     useValidEnglishAuctions(marketplace, {
-      tokenContract: HASH_NFT_COLLECTION_ADDRESS,
+      tokenContract: HOUSE_NFT_COLLECTION_ADDRESS,
       tokenId: nft.metadata.id,
     });
 
@@ -112,7 +119,7 @@ export default function TokenPage({ nft, contractMetadata }: Props) {
       );
     } else if (directListing?.[0]) {
       txResult = await marketplace?.offers.makeOffer({
-        assetContractAddress: HASH_NFT_COLLECTION_ADDRESS,
+        assetContractAddress: HOUSE_NFT_COLLECTION_ADDRESS,
         tokenId: nft.metadata.id,
         totalPrice: bidValue,
       });
@@ -121,6 +128,9 @@ export default function TokenPage({ nft, contractMetadata }: Props) {
     }
     return txResult;
   }
+
+  const router = useRouter()
+  const currentTokenId = router.query?.tokenId;
 
   return (
     <Box className={styles.container} m={"auto"}>
@@ -145,17 +155,17 @@ export default function TokenPage({ nft, contractMetadata }: Props) {
           </Box>
           <Box>
             {activeClaimCondition ? (
-              <Flex borderRadius={'5px'} p={4} bg={'#222528'} gap={8}>
+              <Flex borderRadius={"5px"} p={4} bg={"#222528"} gap={8}>
                 <Box>
                   <Text>Current Phase:</Text>
-                  <Text>Claimed:</Text>
+                  <Text>Supply:</Text>
                   <Text>Price:</Text>
                   <Text>Max Claim Per Wallet:</Text>
                 </Box>
                 <Box>
                   <Text>{activeClaimCondition.metadata?.name}</Text>
                   <Text>{`${activeClaimCondition?.availableSupply}/${activeClaimCondition?.maxClaimableSupply}`}</Text>
-                  <Text>{`${ethers.utils.formatUnits(activeClaimCondition?.price)}`}</Text>
+                  <Text>{`${activeClaimCondition?.price} Matic`}</Text>
                   <Text>{activeClaimCondition.maxClaimablePerWallet}</Text>
                 </Box>
               </Flex>
@@ -165,12 +175,8 @@ export default function TokenPage({ nft, contractMetadata }: Props) {
           </Box>
           <Box className={styles.buyBtn}>
             <Web3Button
-              contractAddress={MARKETPLACE_ADDRESS}
-              action={async () => buyListing()}
-              isDisabled={
-                (!auctionListing || !auctionListing[0]) &&
-                (!directListing || !directListing[0])
-              }
+              contractAddress={HOUSE_NFT_COLLECTION_ADDRESS}
+              action={(nftCollection) => nftCollection.erc1155.claim(Number(currentTokenId), 1)}
             >
               Mint Now
             </Web3Button>
@@ -209,7 +215,7 @@ export default function TokenPage({ nft, contractMetadata }: Props) {
             </Link>
           </Box>
 
-          <Stack bg={'#222528'} p={2.5} borderRadius={"6px"}>
+          <Stack bg={"#222528"} p={2.5} borderRadius={"6px"}>
             <Text color={"darkgray"}>Price:</Text>
             <Skeleton isLoaded={!loadingMarketplace && !loadingDirectListing}>
               {directListing && directListing[0] ? (
@@ -254,7 +260,7 @@ export default function TokenPage({ nft, contractMetadata }: Props) {
                   justifyContent={{ base: "space-around" }}
                   gap={5}
                   borderRadius={"5px"}
-                  bg={'#222528'}
+                  bg={"#222528"}
                   p={2}
                   className={styles.tabList}
                 >
@@ -270,12 +276,12 @@ export default function TokenPage({ nft, contractMetadata }: Props) {
                   >
                     Properties
                   </Tab>
-                  <Tab
+                  {/* <Tab
                     borderRadius={"5px"}
                     _selected={{ color: "white", bg: "blue" }}
                   >
                     Bids
-                  </Tab>
+                  </Tab> */}
                 </TabList>
                 <TabPanels>
                   <TabPanel>
@@ -323,7 +329,7 @@ export default function TokenPage({ nft, contractMetadata }: Props) {
                       </SimpleGrid>
                     </Box>
                   </TabPanel>
-                  <TabPanel>
+                  {/* <TabPanel>
                     <Stack spacing={5}>
                       <Flex direction={"column"}>
                         <Input
@@ -344,7 +350,7 @@ export default function TokenPage({ nft, contractMetadata }: Props) {
                         </Web3Button>
                       </Flex>
                     </Stack>
-                  </TabPanel>
+                  </TabPanel> */}
                 </TabPanels>
               </Tabs>
             </Stack>
@@ -360,7 +366,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
   const sdk = new ThirdwebSDK("mumbai");
 
-  const contract = await sdk.getContract(HASH_NFT_COLLECTION_ADDRESS);
+  const contract = await sdk.getContract(HOUSE_NFT_COLLECTION_ADDRESS);
 
   const nft = await contract.erc1155.get(tokenId);
 
@@ -382,14 +388,14 @@ export const getStaticProps: GetStaticProps = async (context) => {
 export const getStaticPaths: GetStaticPaths = async () => {
   const sdk = new ThirdwebSDK("mumbai");
 
-  const contract = await sdk.getContract(HASH_NFT_COLLECTION_ADDRESS);
+  const contract = await sdk.getContract(HOUSE_NFT_COLLECTION_ADDRESS);
 
   const nfts = await contract?.erc1155.getAll();
 
   const paths = nfts.map((nft) => {
     return {
       params: {
-        contractAddress: HASH_NFT_COLLECTION_ADDRESS,
+        contractAddress: HOUSE_NFT_COLLECTION_ADDRESS,
         tokenId: nft.metadata.id,
       },
     };

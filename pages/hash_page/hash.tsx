@@ -15,10 +15,17 @@ import {
   InputGroup,
   InputLeftElement,
   Select,
+  Skeleton,
+  SkeletonText,
 } from "@chakra-ui/react";
 import NFTGrid from "../../components/hash/NFTGrid";
 import { HASH_NFT_COLLECTION_ADDRESS } from "../../const/addresses";
-import { useContract, useNFTs } from "@thirdweb-dev/react";
+import {
+  useChain,
+  useContract,
+  useNFTs,
+  useTotalCount,
+} from "@thirdweb-dev/react";
 import Image from "next/image";
 import { Search2Icon } from "@chakra-ui/icons";
 import { BsFillGrid3X3GapFill, BsFillGridFill } from "react-icons/bs";
@@ -32,12 +39,16 @@ interface NFTMetadata {
 
 const Hash = () => {
   const { contract } = useContract(HASH_NFT_COLLECTION_ADDRESS);
+  const chain = useChain();
+  const {
+    data: totalCount,
+    isLoading: loading,
+    error,
+  } = useTotalCount(contract);
   const { data, isLoading } = useNFTs(contract);
   const [searchText, setSearch] = useState<string>("");
   const [filteredData, setFilteredData] = useState<NFTMetadata[]>([]);
-  const [collectionMetadata, setCollectionMetadata] = useState<NFTMetadata[]>(
-    []
-  );
+  const [collectionMetadata, setCollectionMetadata] = useState<any>();
   const [gridCount, setGridCount] = useState<number>(5);
 
   // const handleSearch = () => {
@@ -56,14 +67,13 @@ const Hash = () => {
   // };
 
   // const renderData = searchText !== "" ? filteredData : data;
-
-  // useEffect(() => {
-  //   const getData = async () => {
-  //     const dq = await contract?.metadata.get();
-  //     setCollectionMetadata(dq ?? {});
-  //   };
-  //   getData();
-  // }, []);
+  useEffect(() => {
+    const getData = async () => {
+      const contractMetaData = await contract?.metadata.get();
+      setCollectionMetadata(contractMetaData);
+    };
+    getData();
+  }, [contract]);
 
   const handleGridDisplay = () => {
     if (gridCount === 5) {
@@ -73,9 +83,11 @@ const Hash = () => {
     setGridCount(5);
   };
 
+  console.log(collectionMetadata);
+
   return (
     <Box w={"100%"} minH={"70vh"} className={styles.container}>
-      <Box className={styles.banner}></Box>
+      <Box className={styles.hashBanner}></Box>
       <Flex className={styles.detailsDiv}>
         <Box>
           <video
@@ -90,31 +102,39 @@ const Hash = () => {
             <source src="https://imgur.com/PMUg3KZ.mp4" type="video/mp4" />
           </video>
         </Box>
-        <Box>
-          <Heading>{"Hippie Aliens Cosmic Club"}</Heading>
-          <Flex gap={5}>
-            <Text mt={2}>
-              by{" "}
-              <span style={{ color: "#AD00FF", fontWeight: 600 }}>
-                Zuraverse
-              </span>
+        {collectionMetadata ? (
+          <Box>
+            <Heading>{collectionMetadata?.name}</Heading>
+            <Flex gap={5}>
+              <Text mt={2}>
+                by{" "}
+                <span style={{ color: "#AD00FF", fontWeight: 600 }}>
+                  Zuraverse
+                </span>
+              </Text>
+              <Text mt={2}>
+                Items{" "}
+                <span style={{ color: "#AD00FF", fontWeight: 600 }}>
+                  {data?.length}
+                </span>
+              </Text>
+              <Text mt={2}>
+                Chain{" "}
+                <span style={{ color: "#AD00FF", fontWeight: 600 }}>
+                  {`${chain?.chain}`}
+                </span>
+              </Text>
+            </Flex>
+            <Text mt={2} fontWeight={600}>
+              Description
             </Text>
-            <Text mt={2}>
-              Items{" "}
-              <span style={{ color: "#AD00FF", fontWeight: 600 }}>1000</span>
+            <Text mt={2} color={"grey"} fontSize={14}>
+              {collectionMetadata?.description}
             </Text>
-            <Text mt={2}>
-              Chain{" "}
-              <span style={{ color: "#AD00FF", fontWeight: 600 }}>Polygon</span>
-            </Text>
-          </Flex>
-          <Text mt={2} fontWeight={600}>
-            Description
-          </Text>
-          <Text mt={2} color={"grey"} fontSize={14}>
-            {"zuraverse"}
-          </Text>
-        </Box>
+          </Box>
+        ) : (
+          <SkeletonText mt="4"  noOfLines={4} spacing="4" skeletonHeight="2" />
+        )}
       </Flex>
       <Box className={styles.searchDiv}>
         <Tabs variant="unstyled">

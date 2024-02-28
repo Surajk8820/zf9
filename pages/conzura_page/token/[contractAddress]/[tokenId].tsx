@@ -18,6 +18,7 @@ import {
   MediaRenderer,
   ThirdwebNftMedia,
   Web3Button,
+  useActiveClaimCondition,
   useContract,
   useMinimumNextBid,
   useValidDirectListings,
@@ -57,6 +58,10 @@ export default function TokenPage({ nft, contractMetadata }: Props) {
   );
 
   const { contract: nftCollection } = useContract(CONZURA_NFT_COLLECTION_ADDRESS);
+
+  // Add for active claim conditions
+  const { data: activeClaimCondition, isLoading: isLoadingClaimCondition } =
+    useActiveClaimCondition(nftCollection, nft.metadata.id);
 
   const { data: directListing, isLoading: loadingDirectListing } =
     useValidDirectListings(marketplace, {
@@ -116,9 +121,6 @@ export default function TokenPage({ nft, contractMetadata }: Props) {
     return txResult;
   }
 
-  const router = useRouter();
-  console.log(router.query.contractAddress);
-
   return (
     <Box className={styles.container} m={"auto"}>
       <SimpleGrid columns={{ base: 1, md: 2 }} spacing={{ base: 10, md: 20 }}>
@@ -139,6 +141,26 @@ export default function TokenPage({ nft, contractMetadata }: Props) {
           <Box>
             <Text fontWeight={"bold"}>Description:</Text>
             <Text>{nft.metadata.description}</Text>
+          </Box>
+          <Box>
+            {activeClaimCondition ? (
+              <Flex borderRadius={'5px'} p={4} bg={'#222528'} gap={8}>
+                <Box>
+                  <Text>Current Phase:</Text>
+                  <Text>Supply:</Text>
+                  <Text>Price:</Text>
+                  <Text>Max Claim Per Wallet:</Text>
+                </Box>
+                <Box>
+                  <Text>{activeClaimCondition.metadata?.name}</Text>
+                  <Text>{`${activeClaimCondition?.availableSupply}/${activeClaimCondition?.maxClaimableSupply}`}</Text>
+                  <Text>{`${activeClaimCondition?.price} Matic`}</Text>
+                  <Text>{activeClaimCondition.maxClaimablePerWallet}</Text>
+                </Box>
+              </Flex>
+            ) : (
+              <Skeleton></Skeleton>
+            )}
           </Box>
           <Box className={styles.buyBtn}>
             <Web3Button
@@ -186,7 +208,7 @@ export default function TokenPage({ nft, contractMetadata }: Props) {
             </Link>
           </Box>
 
-          <Stack border={"2px solid #20252E"} p={2.5} borderRadius={"6px"}>
+          <Stack bg={'#222528'} p={2.5} borderRadius={"6px"}>
             <Text color={"darkgray"}>Price:</Text>
             <Skeleton isLoaded={!loadingMarketplace && !loadingDirectListing}>
               {directListing && directListing[0] ? (
@@ -231,25 +253,25 @@ export default function TokenPage({ nft, contractMetadata }: Props) {
                   justifyContent={{ base: "space-around" }}
                   gap={5}
                   borderRadius={"5px"}
-                  border={"2px solid #24252E"}
+                  bg={'#222528'}
                   p={2}
                   className={styles.tabList}
                 >
                   <Tab
                     borderRadius={"5px"}
-                    _selected={{ color: "white", bg: "grey" }}
+                    _selected={{ color: "white", bg: "blue" }}
                   >
                     Details
                   </Tab>
                   <Tab
                     borderRadius={"5px"}
-                    _selected={{ color: "white", bg: "grey" }}
+                    _selected={{ color: "white", bg: "blue" }}
                   >
                     Properties
                   </Tab>
                   <Tab
                     borderRadius={"5px"}
-                    _selected={{ color: "white", bg: "grey" }}
+                    _selected={{ color: "white", bg: "blue" }}
                   >
                     Bids
                   </Tab>

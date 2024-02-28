@@ -27,9 +27,6 @@
   color: black;
 }
 
-.tabList {
-    border: 1px solid red;
-}
 
 @media (max-width: 768px){
   .container{

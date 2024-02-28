@@ -3,7 +3,7 @@ import { Grid, Skeleton, Text } from "@chakra-ui/react";
 import React from "react";
 import NFT from "./NFT";
 import Link from "next/link";
-import { HASH_NFT_COLLECTION_ADDRESS } from "../../const/addresses";
+import { HOUSE_NFT_COLLECTION_ADDRESS } from "../../const/addresses";
 
 type Props = {
   isLoading: boolean;
@@ -36,7 +36,7 @@ export default function NFTGrid({
         data.map((nft) =>
           !overrideOnclickBehavior ? (
             <Link
-              href={`/hash_page/token/${HASH_NFT_COLLECTION_ADDRESS}/${nft.metadata.id}`}
+              href={`/house_page/token/${HOUSE_NFT_COLLECTION_ADDRESS}/${nft.metadata.id}`}
               key={nft.metadata.id}
             >
               <NFT nft={nft} />

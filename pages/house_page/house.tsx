@@ -17,14 +17,9 @@ import {
   Select,
   SkeletonText,
 } from "@chakra-ui/react";
-import ConzuraNFTGrid from "../../components/conzura/ConzuraNFTGrid";
-import { CONZURA_NFT_COLLECTION_ADDRESS } from "../../const/addresses";
-import {
-  ContractMetadata,
-  useChain,
-  useContract,
-  useNFTs,
-} from "@thirdweb-dev/react";
+import NFTGrid from "../../components/house/NFTGrid";
+import { HOUSE_NFT_COLLECTION_ADDRESS } from "../../const/addresses";
+import { useChain, useContract, useNFTs } from "@thirdweb-dev/react";
 import Image from "next/image";
 import { Search2Icon } from "@chakra-ui/icons";
 import { BsFillGrid3X3GapFill, BsFillGridFill } from "react-icons/bs";
@@ -36,8 +31,9 @@ interface NFTMetadata {
   external_link?: string;
 }
 
-const Conzura = () => {
-  const { contract } = useContract(CONZURA_NFT_COLLECTION_ADDRESS);
+
+const Hash = () => {
+  const { contract } = useContract(HOUSE_NFT_COLLECTION_ADDRESS);
   const { data, isLoading } = useNFTs(contract);
   const [searchText, setSearch] = useState<string>("");
   const [filteredData, setFilteredData] = useState<NFTMetadata[]>([]);
@@ -64,11 +60,12 @@ const Conzura = () => {
 
   useEffect(() => {
     const getData = async () => {
-      const collectionMetadata = await contract?.metadata.get();
-      setCollectionMetadata(collectionMetadata);
+      let dq:any  = await contract?.metadata.get();
+      setCollectionMetadata(dq);
     };
     getData();
   }, [contract]);
+
 
   const handleGridDisplay = () => {
     if (gridCount === 5) {
@@ -80,7 +77,7 @@ const Conzura = () => {
 
   return (
     <Box w={"100%"} minH={"70vh"} className={styles.container}>
-      <Box className={styles.conzuraBanner}></Box>
+      <Box className={styles.houseBanner}></Box>
       <Flex className={styles.detailsDiv}>
         <Box>
           <video
@@ -90,8 +87,9 @@ const Conzura = () => {
             autoPlay
             loop
             preload={"auto"}
+            controls
           >
-            <source src="https://imgur.com/h2NY3z8.mp4" type="video/mp4" />
+            <source src="https://imgur.com/YpH8ADx.mp4" type="video/mp4" />
           </video>
         </Box>
         {collectionMetadata ? (
@@ -196,7 +194,7 @@ const Conzura = () => {
           <TabPanels>
             <TabPanel mt={4} p={0}>
               <Box>
-                <ConzuraNFTGrid
+                <NFTGrid
                   gridCount={gridCount}
                   isLoading={isLoading}
                   data={data}
@@ -217,4 +215,4 @@ const Conzura = () => {
   );
 };
 
-export default Conzura;
+export default Hash;

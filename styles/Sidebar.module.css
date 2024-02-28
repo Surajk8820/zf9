@@ -10,20 +10,20 @@
 }
 
 .container > div {
-  border: 2px solid rgb(60, 60, 60);
   border-radius: 15px;
 }
 
 .profileDiv {
-  width: 30%;
+  width: 20%;
   height: fit-content;
   padding: 30px;
+  border: 1px solid red;
 }
 
 .profile {
   width: 150px;
   height: 150px;
-  margin:  auto;
+  margin: auto;
   padding: 10px;
   animation: rotateOutlines 2s infinite;
 }
@@ -47,6 +47,9 @@
 }
 
 .neftsDiv {
-  width: 100%;
+  width: 60%;
   height: 50vh;
+  border: 1px solid red;
+  box-sizing: border-box;
+  padding: 20px;
 }

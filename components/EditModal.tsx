@@ -14,25 +14,37 @@ import {
 } from "@chakra-ui/react";
 import { FaEdit } from "react-icons/fa";
 import styles from "../styles/Editmodal.module.css";
+import { uploadCloudinary } from "../components/CloudinaryUpload";
 
-export function EditModal() {
+export function EditModal({ updateFunc, currentUser }: any) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const finalRef = React.useRef(null);
 
-  const [name, setName] = useState("");
-  const [coverImg, setCoverImg] = useState<string | undefined>("");
-  const [profileImg, setProfileImg] = useState<string | undefined>("");
+  const [name, setName] = useState(currentUser?.userName);
+  const [coverImg, setCoverImg] = useState<any>("");
+  const [profileImg, setProfileImg] = useState<any>("");
+  const [email, setMail] = useState(currentUser?.email);
 
-  const handleFormUpdate = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleFormUpdate = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    let cover;
+    let profile;
+
+    if (coverImg !== "") {
+      cover = await uploadCloudinary(coverImg[0]);
+    }
+    if (profileImg !== "") {
+      profile = await uploadCloudinary(profileImg[0]);
+    }
     const payload = {
-      name,
-      coverImg,
-      profileImg,
+      userName: name,
+      coverImg: cover,
+      profileImg: profile,
+      email,
     };
 
-    console.log(payload);
+    updateFunc(payload);
   };
 
   return (
@@ -49,7 +61,7 @@ export function EditModal() {
           color: "grey",
         }}
       >
-        {"Edit"}
+        {""}
       </Button>
       <Modal finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose}>
         {" "}
@@ -61,18 +73,27 @@ export function EditModal() {
             <form onSubmit={handleFormUpdate} className={styles.form}>
               <Box>
                 <label>Name</label>
-                <Input placeholder="enter name" />
+                <Input
+                  placeholder="enter name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                />
               </Box>
               <Box>
                 <label>Email</label>
-                <Input placeholder="enter email" />
+                <Input
+                  value={email}
+                  type="email"
+                  placeholder="enter email"
+                  onChange={(e) => setMail(e.target.value)}
+                />
               </Box>
               <Box>
                 <label>Cover Image</label>
                 <Input
                   type="file"
                   accept="image/png"
-                  onChange={(e) => setCoverImg(e?.target?.files?.[0].name)}
+                  onChange={(e) => setCoverImg(e.target.files)}
                 />
               </Box>
               <Box>
@@ -83,9 +104,16 @@ export function EditModal() {
                   onChange={(e) => setProfileImg(e?.target?.files?.[0].name)}
                 />
               </Box>
-                <Button mt={4} mb={4} w="100%" bg="#0000FF" color={"white"} type="submit">
-                  Update
-                </Button>
+              <Button
+                mt={4}
+                mb={4}
+                w="100%"
+                bg="#0000FF"
+                color={"white"}
+                type="submit"
+              >
+                Update
+              </Button>
             </form>
           </ModalBody>
         </ModalContent>

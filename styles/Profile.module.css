@@ -1,9 +1,12 @@
+@import url("https://fonts.googleapis.com/css2?family=Anta&display=swap");
+
 .container {
   width: 100%;
-  height: 100vh;
+  height: fit-content;
   display: flex;
   background-color: #141414;
   color: white;
+  font-family: "Anta", sans-serif;
 }
 
 .sidebar {
@@ -35,6 +38,26 @@
   font-size: 30px;
 }
 
+.transectionBtn {
+  justify-content: center;
+  gap: 50px;
+  align-items: center;
+  padding: 10px;
+}
+
+.transectionBtn > button {
+  width: 150px;
+  height: 40px;
+  border: 1px solid white;
+  border-radius: 10px;
+  background-color: transparent;
+  color: white;
+}
+
+.transectionBtn > button:hover {
+  background-color: rgb(98, 96, 96);
+}
+
 .linkTag:hover {
   background-color: blue;
   color: white;
@@ -49,7 +72,7 @@
 }
 
 .profileSection {
-  width: 35%;
+  width: 40%;
   height: fit-content;
   border-radius: 15px;
   box-shadow: rgba(63, 63, 252, 0.35) 0px 5px 15px;
@@ -63,10 +86,10 @@
 
 .profileImg {
   border: 2px solid grey;
-  width: 150px;
-  height: 150px;
+  width: 120px;
+  height: 120px;
   border-radius: 50%;
-  left: 10;
+  margin: -60px auto;
 }
 
 .profileImg > img {
@@ -75,7 +98,63 @@
   object-fit: cover;
 }
 
-.emptyNFT{
+.boxContainer {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  padding: 20px;
+  gap: 10px;
+  color: white;
+}
+
+.houseDiv {
+  position: relative;
+}
+
+.houseTxt {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: none;
+  transition: 0.5s ease-in-out;
+  width: 100%;
+  height: 100%;
+  font-size: 25px;
+}
+
+.houseDiv:hover .houseTxt {
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.boxContainer > div:nth-child(1) {
+  background-color: #654e30;
+}
+
+.boxContainer > div:nth-child(2) {
+  background-color: #044a2f;
+}
+
+.boxContainer > div:nth-child(3) {
+  background-color: #04345c;
+}
+
+.boxContainer > div:nth-child(4) {
+  border: 1px solid rgb(59, 59, 59);
+}
+
+.box {
+  flex-grow: 1;
+  height: 150px;
+  box-sizing: border-box;
+  padding: 10px;
+  font-size: 20px;
+  position: relative;
+}
+
+.emptyNFT {
   width: 100%;
   height: 80vh;
   display: flex;
@@ -83,9 +162,17 @@
   justify-content: center;
 }
 
-.emptyNFT > button{
+.emptyNFT > button {
   background-color: blue;
   color: white;
+}
+
+.neonText {
+  color: #faf9f9;
+  text-shadow: 0 0 7px #fff, 0 0 10px #fff, 0 0 21px #fff,
+    0 0 42px rgb(243, 52, 42), 0 0 82px rgb(255, 28, 7),
+    0 0 92px rgb(233, 15, 15), 0 0 102px rgb(250, 73, 67),
+    0 0 151px rgb(251, 88, 52);
 }
 
 .btn {

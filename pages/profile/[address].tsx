@@ -17,6 +17,10 @@ import {
   Alert,
   AlertIcon,
   Progress,
+  Spinner,
+  Grid,
+  CircularProgress,
+  CircularProgressLabel,
 } from "@chakra-ui/react";
 import React, { useEffect, useMemo, useState, useRef } from "react";
 import styles from "../../styles/Profile.module.css";
@@ -60,6 +64,9 @@ import { useAddress } from "@thirdweb-dev/react";
 import axios from "axios";
 import { EditModal } from "../../components/EditModal";
 import StatusIndicator from "../../components/StatusIndicator";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import ClaimKarmaModal from "../../components/ClaimKarmaModal";
 
 // import Sidebar from "../../components/hash/Sidebar";
 
@@ -73,6 +80,8 @@ export default function ProfilePage() {
   const [currentUser, setUser] = useState<any>();
   const [completionPercentage, setCompletionPercentage] = useState(25);
   const tokenDrop = useTokenDrop(KARMA_TOKEN_ADDRESS);
+  const [isClaimmed, setIsClaimmed] = useState(false);
+  const [currentHouse, setCurrentHouse] = useState("");
   const { data: tokenSupply } = useTokenSupply(tokenDrop);
   const { data: tokenBalance } = useTokenBalance(tokenDrop, address);
   const { mutate: claimToken, isLoading: clamming } = useClaimToken(tokenDrop);
@@ -139,7 +148,7 @@ export default function ProfilePage() {
     setCompletionPercentage(newPercentage);
   };
 
-  console.log(completionPercentage, currentUser);
+  // console.log(completionPercentage, currentUser);
 
   useEffect(() => {
     updateCompletion();
@@ -166,20 +175,20 @@ export default function ProfilePage() {
   let personalWallet = usePersonalWalletAddress();
 
   // Fetching profile data
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(`${backendUrl}/user`, {
-          headers: {
-            zurawallet: `${smartWallet}`,
-          },
-        });
-        setUser(response?.data);
-      } catch (error) {
-        console.error("Error fetching profile data:", error);
-      }
-    };
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(`${backendUrl}/user`, {
+        headers: {
+          zurawallet: `${smartWallet}`,
+        },
+      });
+      setUser(response?.data);
+    } catch (error) {
+      console.error("Error fetching profile data:", error);
+    }
+  };
 
+  useEffect(() => {
     fetchData();
   }, [smartWallet]);
 
@@ -196,8 +205,9 @@ export default function ProfilePage() {
             `http://localhost:8080/user/profile`,
             payload
           );
-          console.log(response.data);
+          // console.log(response.data);
         }
+        return;
       } catch (error) {
         console.error(error);
       }
@@ -207,16 +217,86 @@ export default function ProfilePage() {
   }, [smartWallet, personalWallet]);
 
   // function for clamming token
-
   const claimKarma = () => {
     let amount: number = 100;
-    claimToken({ amount, to: address as string });
+
+    try {
+      claimToken(
+        { amount, to: address as string },
+        {
+          onSuccess: (data) => {
+            updateBackend({
+              gotProfileReward: true,
+            });
+            setIsClaimmed(true);
+            toast.success(`YaY! You got 100 💰Karma`, {
+              position: "bottom-center",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "colored",
+            });
+          },
+        }
+      );
+    } catch (err) {
+      console.log(err);
+      toast.error("Opps! try again");
+    }
   };
 
-  // function for setting reward to backend 
-  // const setClaimed = () => {
-  //   axios.put("http://localhost:8080/user/profile/update")
-  // }
+  // if houseNft minted, store the id to backend
+
+  useEffect(() => {
+    if (
+      houseNfts &&
+      houseNfts?.length > 0 &&
+      currentUser &&
+      currentUser?.hasHouseId === null
+    ) {
+      updateBackend({
+        hasHouseId: houseNfts[0]?.metadata.id,
+        hasHouseMetadata: houseNfts[0]?.metadata,
+      });
+      window.location.reload();
+    }
+  }, [houseNfts, currentUser]);
+
+  // function for manipulating backend
+  const updateBackend = (payload: any) => {
+    axios
+      .put("http://localhost:8080/user/profile/update", payload, {
+        headers: {
+          Authorization: "Bearer your_access_token",
+          "Content-Type": "application/json",
+          zurawallet: smartWallet,
+        },
+      })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+        console.log("something went wrong!");
+      });
+  };
+
+  if (!address) {
+    return (
+      <Flex
+        bg={"black"}
+        align={"center"}
+        justify={"center"}
+        w={"100%"}
+        h={"100vh"}
+      >
+        <CircularProgress isIndeterminate color="green.300" />
+      </Flex>
+    );
+  }
 
   return (
     <Box className={styles.container}>
@@ -253,7 +333,7 @@ export default function ProfilePage() {
       <Box className={styles.main}>
         <Box className={styles.profileSection}>
           <Box position={"relative"}>
-            <Box className={styles.coverImg} pos={"relative"}>
+            <Box className={styles.coverImg}>
               <Image
                 width={"100%"}
                 height={"100%"}
@@ -261,31 +341,59 @@ export default function ProfilePage() {
                 alt="cover"
               />
               {completionPercentage === 100 ? null : (
-                <Box top={0} pos={"absolute"}>
-                  <Alert color={"black"} status="warning">
-                    <AlertIcon />
-                    Seems your account is not completed🙂, Complete Now!
-                  </Alert>
-                </Box>
+                <Flex
+                  h={"70px"}
+                  w={"100%"}
+                  top={0}
+                  pos={"absolute"}
+                  align={"center"}
+                  justify={"start"}
+                  bg={"#333652"}
+                  gap={3}
+                  p={3}
+                >
+                  <CircularProgress
+                    value={completionPercentage}
+                    color="#04D010"
+                  >
+                    <CircularProgressLabel>{`${completionPercentage}%`}</CircularProgressLabel>
+                  </CircularProgress>
+                  <Text>
+                    {`Seems your profile is not completed!  ${
+                      !currentUser?.email ? "Add Email &" : ""
+                    } ${
+                      !currentUser?.userName && !currentUser?.profileImg
+                        ? "Add Name & Profile Image &"
+                        : ""
+                    } ${
+                      !currentUser?.hasHouseId ? "Mint House" : ""
+                    } to Complete ${
+                      currentUser?.gotProfileReward
+                        ? ""
+                        : "& earn 100 Karma Points 😋"
+                    }`}
+                  </Text>
+                </Flex>
               )}
             </Box>
-            <Box
-              top={100}
-              left={100}
-              position={"absolute"}
-              overflow={"hidden"}
-              className={styles.profileImg}
-            >
+            <Box overflow={"hidden"} className={styles.profileImg}>
               <Image src={"https://imgur.com/n22iSFg.png"} alt="profile_pic" />
             </Box>
           </Box>
-          <Box mt={"80px"} textAlign={"center"}>
-            <Box display={personalWallet === undefined ? "none" : "block"}>
-              <EditModal />
-              <Text fontSize={"20px"} fontWeight={600}>
-                {currentUser?.userName?.toUpperCase() || "Anonymous"}
-              </Text>
+          <Box textAlign={"center"}>
+            <Box
+              textAlign={"end"}
+              display={personalWallet === undefined ? "none" : "block"}
+            >
+              <EditModal updateFunc={updateBackend} currentUser={currentUser} />
             </Box>
+            <Text
+              mt={personalWallet === undefined ? "70px" : "30px"}
+              fontSize={"20px"}
+              fontWeight={600}
+            >
+              {currentUser?.userName?.toUpperCase() || "Anonymous"}
+            </Text>
             <Flex
               display={address ? "flex" : "none"}
               gap={3}
@@ -298,53 +406,105 @@ export default function ProfilePage() {
             <Box>
               <StatusIndicator />
             </Box>
+            <Text>{`Email : ${currentUser?.email || "N/A"}`}</Text>
+            <Flex className={styles.transectionBtn}>
+              <Button>Send</Button>
+              <Button>Receive</Button>
+            </Flex>
           </Box>
           {personalWallet === undefined ? (
             <Box p={4} textAlign={"center"}>
-              <Button>Switch to Zura Wallet</Button>
+              <Text className={styles.neonText} fontWeight={600}>
+                Switch to Zura Wallet
+              </Text>
             </Box>
           ) : (
             <Box>
-              <Box p={5} mt={"20px"}>
-                <Text>{`Email: ${currentUser?.email || "N/A"}`}</Text>
-                <Text>{`Karma Balance: ${tokenBalance?.displayValue} ${tokenBalance?.symbol}`}</Text>
-                <Text>{`Trees Planted: ${
-                  currentUser?.treesPlanted || 0
-                }`}</Text>
-                <Text>{`Carbon Offset: ${
-                  currentUser?.carbonOffset || 0
-                }`}</Text>
+              <Box className={styles.boxContainer}>
+                <Box className={styles.box}>
+                  <Flex direction="column">
+                    <Text>Karma Points</Text>
+                    <Text fontSize={"40px"}>
+                      {tokenBalance?.displayValue || 0}
+                    </Text>
+                  </Flex>
+                  <Image
+                    src="https://imgur.com/vaMs9nq.png"
+                    w={"40%"}
+                    h={"40%"}
+                    alt="logo"
+                    pos={"absolute"}
+                    right={0}
+                    bottom={1}
+                  />
+                </Box>
+                <Box className={styles.box}>
+                  <Flex direction="column">
+                    <Text>{"Trees Planted"}</Text>
+                    <Text fontSize={"40px"}>
+                      {Number(tokenBalance?.displayValue) / 10 || 0}
+                    </Text>
+                  </Flex>
+                  <Image
+                    src="https://imgur.com/FzIURqN.png"
+                    w={"40%"}
+                    h={"40%"}
+                    alt="logo"
+                    pos={"absolute"}
+                    right={0}
+                    bottom={1}
+                  />
+                </Box>
+                <Box className={styles.box}>
+                  <Flex direction="column">
+                    <Text>{"Carbon Offset (tonne)"}</Text>
+                    <Text fontSize={"40px"}>
+                      {(Number(tokenBalance?.displayValue) / 10) * 0.025 || 0}
+                    </Text>
+                  </Flex>
+                  <Image
+                    src="https://imgur.com/jwepmIH.png"
+                    w={"40%"}
+                    h={"40%"}
+                    alt="logo"
+                    pos={"absolute"}
+                    right={0}
+                    bottom={1}
+                  />
+                </Box>
+                <Flex
+                  align={"center"}
+                  border={"1px solid red"}
+                  justify={"center"}
+                  p={0}
+                  className={styles.box}
+                >
+                  {currentUser?.hasHouseId ? (
+                    <Box h={"100%"} className={styles.houseDiv}>
+                      <Image
+                        objectFit={"contain"}
+                        src={currentUser.hasHouseMetadata.image}
+                        width={"100%"}
+                        height={"100%"}
+                        alt="house_img"
+                      />
+                      <Text className={styles.houseTxt}>
+                        {currentUser?.hasHouseMetadata?.name}
+                      </Text>
+                    </Box>
+                  ) : (
+                    "Mint House"
+                  )}
+                </Flex>
               </Box>
               {completionPercentage == 100 &&
               currentUser?.gotProfileReward === false ? (
-                <Box p={2}>
-                  <Button color={'white'} bg={"green"} w={"100%"}>
-                    <Image
-                      src="https://imgur.com/Sma4TLJ.png"
-                      width={"30px"}
-                      h={"30px"}
-                      alt="karma_coin"
-                      mr={2}
-                    />
-                    Claim Karma
-                  </Button>
-                </Box>
-              ) : (
-                <Flex flexDir={"column"} className={styles.progressbar}>
-                  {completionPercentage < 100 ? (
-                    <>
-                      <Progress
-                        colorScheme="purple"
-                        size={"lg"}
-                        width={"100%"}
-                        hasStripe
-                        value={completionPercentage}
-                      />
-                      <Text>{`${completionPercentage}% completed`}</Text>
-                    </>
-                  ) : null}
-                </Flex>
-              )}
+                <ClaimKarmaModal
+                  func={claimKarma}
+                  isLoading={clamming}
+                  isClaimmed={isClaimmed}
+                />
+              ) : null}
             </Box>
           )}
           <Box>
@@ -357,6 +517,7 @@ export default function ProfilePage() {
             >
               {address ? "Logout" : "Login"}
             </button>
+            <ToastContainer />
           </Box>
         </Box>
         <Box className={styles.nftSection}>
@@ -392,9 +553,13 @@ export default function ProfilePage() {
               <TabPanel p={"20px 0px"}>
                 {houseNfts?.length === 0 ? (
                   <Box className={styles.emptyNFT}>
-                    <Button onClick={(e) => redirectToMint("house")}>
-                      Mint House
-                    </Button>
+                    {personalWallet === undefined ? (
+                      "No NFT's in your wallet"
+                    ) : (
+                      <Button onClick={(e) => redirectToMint("house")}>
+                        Mint House
+                      </Button>
+                    )}
                   </Box>
                 ) : (
                   <Box className={styles.nftGrid}>
@@ -421,9 +586,13 @@ export default function ProfilePage() {
               <TabPanel p={"20px 0px"}>
                 {hashNfts?.length === 0 ? (
                   <Box className={styles.emptyNFT}>
-                    <Button onClick={(e) => redirectToMint("hash")}>
-                      Mint Hash
-                    </Button>
+                    {personalWallet === undefined ? (
+                      "No NFT's in your wallet"
+                    ) : (
+                      <Button onClick={(e) => redirectToMint("house")}>
+                        Mint House
+                      </Button>
+                    )}
                   </Box>
                 ) : (
                   <Box className={styles.nftGrid}>
@@ -450,9 +619,13 @@ export default function ProfilePage() {
               <TabPanel p={"20px 0px"}>
                 {conzuraNfts?.length === 0 ? (
                   <Box className={styles.emptyNFT}>
-                    <Button onClick={(e) => redirectToMint("conzura")}>
-                      Mint Conzura
-                    </Button>
+                    {personalWallet === undefined ? (
+                      "No NFT's in your wallet"
+                    ) : (
+                      <Button onClick={(e) => redirectToMint("house")}>
+                        Mint House
+                      </Button>
+                    )}
                   </Box>
                 ) : (
                   <Box className={styles.nftGrid}>

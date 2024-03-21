@@ -33,7 +33,8 @@ import {
 import { GetStaticPaths, GetStaticProps } from "next";
 import Link from "next/link";
 import styles from "../../../../styles/TokenPage.module.css";
-import { useRouter } from "next/router";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 type Props = {
   nft: NFT;
@@ -57,7 +58,9 @@ export default function TokenPage({ nft, contractMetadata }: Props) {
     "marketplace-v3"
   );
 
-  const { contract: nftCollection } = useContract(CONZURA_NFT_COLLECTION_ADDRESS);
+  const { contract: nftCollection } = useContract(
+    CONZURA_NFT_COLLECTION_ADDRESS
+  );
 
   // Add for active claim conditions
   const { data: activeClaimCondition, isLoading: isLoadingClaimCondition } =
@@ -124,57 +127,23 @@ export default function TokenPage({ nft, contractMetadata }: Props) {
   return (
     <Box className={styles.container} m={"auto"}>
       <SimpleGrid columns={{ base: 1, md: 2 }} spacing={{ base: 10, md: 20 }}>
-        <Stack spacing={"20px"}>
-          <Box
-            border={"6px solid #24252D"}
-            borderRadius={"6px"}
-            overflow={"hidden"}
-          >
-            <Skeleton isLoaded={!loadingMarketplace && !loadingDirectListing}>
+        <Box
+          overflow={"hidden"}
+          width={"100%"}
+          height={"65vh"}
+          display={"flex"}
+          alignItems={"center"}
+        >
+          <Skeleton isLoaded={!loadingMarketplace}>
+            <Box m={"auto"} w={{ base: "100%", md: "60%" }}>
               <ThirdwebNftMedia
                 metadata={nft.metadata}
                 width="100%"
                 height="100%"
               />
-            </Skeleton>
-          </Box>
-          <Box>
-            <Text fontWeight={"bold"}>Description:</Text>
-            <Text>{nft.metadata.description}</Text>
-          </Box>
-          <Box>
-            {activeClaimCondition ? (
-              <Flex borderRadius={'5px'} p={4} bg={'#222528'} gap={8}>
-                <Box>
-                  <Text>Current Phase:</Text>
-                  <Text>Supply:</Text>
-                  <Text>Price:</Text>
-                  <Text>Max Claim Per Wallet:</Text>
-                </Box>
-                <Box>
-                  <Text>{activeClaimCondition.metadata?.name}</Text>
-                  <Text>{`${activeClaimCondition?.availableSupply}/${activeClaimCondition?.maxClaimableSupply}`}</Text>
-                  <Text>{`${activeClaimCondition?.price} Matic`}</Text>
-                  <Text>{activeClaimCondition.maxClaimablePerWallet}</Text>
-                </Box>
-              </Flex>
-            ) : (
-              <Skeleton></Skeleton>
-            )}
-          </Box>
-          <Box className={styles.buyBtn}>
-            <Web3Button
-              contractAddress={MARKETPLACE_ADDRESS}
-              action={async () => buyListing()}
-              isDisabled={
-                (!auctionListing || !auctionListing[0]) &&
-                (!directListing || !directListing[0])
-              }
-            >
-              Mint Now
-            </Web3Button>
-          </Box>
-        </Stack>
+            </Box>
+          </Skeleton>
+        </Box>
 
         <Stack spacing={"20px"}>
           {contractMetadata && (
@@ -206,92 +175,64 @@ export default function TokenPage({ nft, contractMetadata }: Props) {
                 </Text>
               </Flex>
             </Link>
-          </Box>
-
-          <Stack bg={'#222528'} p={2.5} borderRadius={"6px"}>
-            <Text color={"darkgray"}>Price:</Text>
-            <Skeleton isLoaded={!loadingMarketplace && !loadingDirectListing}>
-              {directListing && directListing[0] ? (
-                <Text fontSize={{ base: "2xl", md: "3xl" }} fontWeight={"bold"}>
-                  {directListing[0]?.currencyValuePerToken.displayValue}
-                  {" " + directListing[0]?.currencyValuePerToken.symbol}
-                </Text>
-              ) : auctionListing && auctionListing[0] ? (
-                <Text fontSize={{ base: "2xl", md: "3xl" }} fontWeight={"bold"}>
-                  {auctionListing[0]?.buyoutCurrencyValue.displayValue}
-                  {" " + auctionListing[0]?.buyoutCurrencyValue.symbol}
-                </Text>
-              ) : (
-                <Text fontSize={"3xl"} fontWeight={"bold"}>
-                  Not for sale
-                </Text>
-              )}
-            </Skeleton>
-            <Skeleton isLoaded={!loadingAuction}>
-              {auctionListing && auctionListing[0] && (
-                <Flex direction={"column"}>
-                  <Text color={"darkgray"}>Bids starting from</Text>
-                  <Text fontSize={"3xl"} fontWeight={"bold"}>
-                    {auctionListing[0]?.minimumBidCurrencyValue.displayValue}
-                    {" " + auctionListing[0]?.minimumBidCurrencyValue.symbol}
-                  </Text>
-                  <Text></Text>
-                </Flex>
-              )}
-            </Skeleton>
-          </Stack>
-          <Skeleton
-            isLoaded={
-              !loadingMarketplace || !loadingDirectListing || !loadingAuction
-            }
-          >
-            {/* --------place bid Button ----------------------------------------------------------------------------------------------------------- */}
-
-            <Stack>
+            <Box mt={4} mb={4}>
+              <Text fontWeight={"bold"}>Description:</Text>
+              <Text>{nft.metadata.description}</Text>
+            </Box>
+            <Box>
               <Tabs variant="unstyled">
                 <TabList
                   justifyContent={{ base: "space-around" }}
                   gap={5}
                   borderRadius={"5px"}
-                  bg={'#222528'}
+                  bg={"#222528"}
                   p={2}
                   className={styles.tabList}
                 >
                   <Tab
                     borderRadius={"5px"}
-                    _selected={{ color: "white", bg: "blue" }}
+                    _selected={{ color: "white", bg: "#0C2D48" }}
+                    width={"50%"}
                   >
                     Details
                   </Tab>
                   <Tab
                     borderRadius={"5px"}
-                    _selected={{ color: "white", bg: "blue" }}
+                    _selected={{ color: "white", bg: "#0C2D48" }}
+                    width={"50%"}
                   >
                     Properties
-                  </Tab>
-                  <Tab
-                    borderRadius={"5px"}
-                    _selected={{ color: "white", bg: "blue" }}
-                  >
-                    Bids
                   </Tab>
                 </TabList>
                 <TabPanels>
                   <TabPanel>
                     <Flex gap={8} justifyContent={"start"} alignItems={"start"}>
-                      <Box>
-                        <Text>Contract Address:</Text>
-                        <Text>Token Id:</Text>
-                        <Text>Chain:</Text>
-                        <Text>Token Standred:</Text>
-                        <Text>Creator Fee:</Text>
-                      </Box>
-                      <Box>
-                        <Text>265825625d5f4</Text>
-                        <Text>265825625d5f4</Text>
-                        <Text>Polygon</Text>
-                        <Text>ERC-1155</Text>
-                        <Text>5%</Text>
+                      <Box fontSize={'16px'} width={"100%"}>
+                        {activeClaimCondition ? (
+                          <Flex
+                            borderRadius={"5px"}
+                            p={4}
+                            bg={"#222528"}
+                            gap={8}
+                          >
+                            <Box>
+                              <Text>Current Phase:</Text>
+                              <Text>Supply:</Text>
+                              <Text>Price:</Text>
+                              <Text>Max Claim Per Wallet:</Text>
+                            </Box>
+                            <Box>
+                              <Text>{activeClaimCondition.metadata?.name}</Text>
+                              <Text>{`${activeClaimCondition?.availableSupply}/${activeClaimCondition?.maxClaimableSupply}`}</Text>
+                              <Text>{`${activeClaimCondition?.price} Matic`}</Text>
+                              <Text>
+                                {activeClaimCondition.maxClaimablePerWallet}
+                              </Text>
+                            </Box>
+                          </Flex>
+                        ) : (
+                          <Skeleton></Skeleton>
+                        )}
                       </Box>
                     </Flex>
                   </TabPanel>
@@ -322,34 +263,34 @@ export default function TokenPage({ nft, contractMetadata }: Props) {
                       </SimpleGrid>
                     </Box>
                   </TabPanel>
-                  <TabPanel>
-                    <Stack spacing={5}>
-                      <Flex direction={"column"}>
-                        <Input
-                          mb={5}
-                          defaultValue={
-                            auctionListing?.[0]?.minimumBidCurrencyValue
-                              ?.displayValue || 0
-                          }
-                          type={"number"}
-                          onChange={(e) => setBidValue(e.target.value)}
-                        />
-                        <Web3Button
-                          contractAddress={MARKETPLACE_ADDRESS}
-                          action={async () => await createBidOffer()}
-                          isDisabled={!auctionListing || !auctionListing[0]}
-                        >
-                          Place Bid
-                        </Web3Button>
-                      </Flex>
-                    </Stack>
-                  </TabPanel>
                 </TabPanels>
               </Tabs>
-            </Stack>
-          </Skeleton>
+            </Box>
+            <Box className={styles.buyBtn}>
+              <Web3Button
+                style={{ color: "white", background: "blue", width: "100%", height : "50px" }}
+                contractAddress={CONZURA_NFT_COLLECTION_ADDRESS}
+                action={(contract) =>
+                  contract.erc1155.claim(nft?.metadata?.id, 1)
+                }
+                onSuccess={() =>
+                  toast.success("Claimed Success!", {
+                    position: "bottom-center",
+                    autoClose: 3000,
+                    theme: "colored",
+                  })
+                }
+                onError={(e) => {
+                  console.log(e);
+                }}
+              >
+                Claim
+              </Web3Button>
+            </Box>
+          </Box>
         </Stack>
       </SimpleGrid>
+      <ToastContainer />
     </Box>
   );
 }

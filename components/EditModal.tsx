@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Modal,
   ModalOverlay,
@@ -20,10 +20,10 @@ export function EditModal({ updateFunc, currentUser }: any) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const finalRef = React.useRef(null);
 
-  const [name, setName] = useState(currentUser?.userName);
+  const [name, setName] = useState(currentUser?.userName || "");
   const [coverImg, setCoverImg] = useState<any>("");
   const [profileImg, setProfileImg] = useState<any>("");
-  const [email, setMail] = useState(currentUser?.email);
+  const [email, setMail] = useState(currentUser?.email || "");
 
   const handleFormUpdate = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -31,9 +31,9 @@ export function EditModal({ updateFunc, currentUser }: any) {
     let cover;
     let profile;
 
-    if (coverImg !== "") {
-      cover = await uploadCloudinary(coverImg[0]);
-    }
+    // if (coverImg !== "") {
+    //   cover = await uploadCloudinary(coverImg[0]);
+    // }
     if (profileImg !== "") {
       profile = await uploadCloudinary(profileImg[0]);
     }
@@ -44,8 +44,15 @@ export function EditModal({ updateFunc, currentUser }: any) {
       email,
     };
 
-    updateFunc(payload);
+    console.log(payload)
+
+    updateFunc(payload)
   };
+
+  useEffect(() => {
+    setName(currentUser?.userName || "");
+    setMail(currentUser?.email || "");
+  }, [currentUser]);
 
   return (
     <>
@@ -92,7 +99,6 @@ export function EditModal({ updateFunc, currentUser }: any) {
                 <label>Cover Image</label>
                 <Input
                   type="file"
-                  accept="image/png"
                   onChange={(e) => setCoverImg(e.target.files)}
                 />
               </Box>
@@ -100,7 +106,6 @@ export function EditModal({ updateFunc, currentUser }: any) {
                 <label>Profile Image</label>
                 <Input
                   type="file"
-                  accept="image/png"
                   onChange={(e) => setProfileImg(e?.target?.files?.[0].name)}
                 />
               </Box>

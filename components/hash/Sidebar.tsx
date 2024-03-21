@@ -29,9 +29,8 @@ import {
   FiStar,
   FiSettings,
   FiMenu,
-  FiBell,
-  FiChevronDown,
 } from "react-icons/fi";
+import {FaSignal} from "react-icons/fa"
 import { IconType } from "react-icons";
 import { ConnectWallet, useAddress } from "@thirdweb-dev/react";
 import styles from "../../styles/Sidebar.module.css";
@@ -72,6 +71,7 @@ const LinkItems: Array<LinkItemProps> = [
   { name: "Explore", icon: FiCompass },
   { name: "Favourites", icon: FiStar },
   { name: "Settings", icon: FiSettings },
+  {name : "Karma Level", icon : FaSignal}
 ];
 
 const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {

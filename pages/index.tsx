@@ -12,9 +12,9 @@ import {
   TabPanels,
   Tab,
   TabPanel,
+  Image
 } from "@chakra-ui/react";
 import TabCard from "../components/TabCard";
-import Image from "next/image";
 import { useRouter } from "next/router";
 
 const Home: NextPage = () => {
@@ -28,8 +28,8 @@ const Home: NextPage = () => {
     <Box className={styles.container}>
       <Box className={styles.headingSection}>
         <Image
-          width={1500}
-          height={1500}
+          width={'100%'}
+          height={'100%'}
           src="https://imgur.com/d47svBB.png"
           alt="seaction_logo"
         />

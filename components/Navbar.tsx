@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { ConnectWallet, darkTheme, useAddress } from "@thirdweb-dev/react";
 import NextLink from "next/link";
 import {
@@ -31,6 +31,18 @@ const Navbar = () => {
     router.push("/");
   };
 
+  const seacrhData = [
+    {
+      searchText: "conzura",
+    },
+    {
+      searchText: "house",
+    },
+    {
+      searchText: "hash",
+    },
+  ];
+
   return (
     <>
       <Box
@@ -62,6 +74,22 @@ const Navbar = () => {
                 type="text"
                 placeholder="Search for collections"
               />
+              {/* <Box
+                p={2}
+                borderRadius={"3px"}
+                border={"2px solid grey"}
+                mt={"50px"}
+                bg={"transparent"}
+                position={"absolute"}
+                top={0}
+                width={"100%"}
+                height={"fit-content"}
+                zIndex={1000}
+              >
+                <p>fg</p>
+                <p>g</p>
+                <p>h</p>
+              </Box> */}
             </InputGroup>
           </Box>
           <Flex alignItems={"center"}>
@@ -91,7 +119,11 @@ const Navbar = () => {
               {address && (
                 <Link as={NextLink} href={`/profile/${address}`}>
                   <Tooltip hasArrow label={"Profile"}>
-                    <Avatar border={'2px solid #444444'} src="https://imgur.com/752APp1.png" ml={"10px"} />
+                    <Avatar
+                      border={"2px solid #444444"}
+                      src="https://imgur.com/752APp1.png"
+                      ml={"10px"}
+                    />
                   </Tooltip>
                 </Link>
               )}

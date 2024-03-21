@@ -1,6 +1,6 @@
 import type { NFT as NFTType } from "@thirdweb-dev/sdk";
 import { Grid, Skeleton, Text } from "@chakra-ui/react";
-import React from "react";
+import React, { useState } from "react";
 import NFT from "./NFT";
 import Link from "next/link";
 import { HASH_NFT_COLLECTION_ADDRESS } from "../../const/addresses";
@@ -20,6 +20,17 @@ export default function NFTGrid({
   emptyText = "Sorry🙂, No NFTs found",
   gridCount,
 }: Props) {
+  // const [searchText, setSearchText] = useState("");
+  // const [filteredData, setFilterData] = useState();
+
+  // const handleChange = (e: any) => {
+  //   const searchText = e.target.value.toLowerCase();
+  //   const filteredData = data && data.filter((item) =>
+  //     item.searchText.toLowerCase().includes(searchText)
+  //   );
+  //   console.log(filteredData);
+  // };
+
   return (
     <Grid
       templateColumns={{

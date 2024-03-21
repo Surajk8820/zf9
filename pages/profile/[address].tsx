@@ -55,7 +55,7 @@ import {
   useTokenBalance,
   useClaimToken,
 } from "@thirdweb-dev/react";
-import { FaCommentsDollar, FaHome } from "react-icons/fa";
+import { FaCommentsDollar, FaHome, FaSignal } from "react-icons/fa";
 import { MdDashboard, MdContactSupport } from "react-icons/md";
 import { CopyIcon, Search2Icon } from "@chakra-ui/icons";
 import { CgProfile } from "react-icons/cg";
@@ -67,6 +67,7 @@ import StatusIndicator from "../../components/StatusIndicator";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ClaimKarmaModal from "../../components/ClaimKarmaModal";
+import { KarmaLevel } from "../../components/KarmaLevel";
 
 // import Sidebar from "../../components/hash/Sidebar";
 
@@ -202,7 +203,7 @@ export default function ProfilePage() {
           };
 
           const response = await axios.post(
-            `http://localhost:8080/user/profile`,
+            `https://zura-backend-yzro.vercel.app/user/profile`,
             payload
           );
           // console.log(response.data);
@@ -268,19 +269,24 @@ export default function ProfilePage() {
   // function for manipulating backend
   const updateBackend = (payload: any) => {
     axios
-      .put("http://localhost:8080/user/profile/update", payload, {
-        headers: {
-          Authorization: "Bearer your_access_token",
-          "Content-Type": "application/json",
-          zurawallet: smartWallet,
-        },
-      })
+      .put(
+        "https://zura-backend-yzro.vercel.app/user/profile/update",
+        payload,
+        {
+          headers: {
+            Authorization: "Bearer your_access_token",
+            "Content-Type": "application/json",
+            zurawallet: smartWallet,
+          },
+        }
+      )
       .then((res) => {
-        console.log(res);
+        toast.success("Profile Updated!");
       })
       .catch((err) => {
         console.log(err);
         console.log("something went wrong!");
+        toast.error("something went wrong!");
       });
   };
 
@@ -297,6 +303,8 @@ export default function ProfilePage() {
       </Flex>
     );
   }
+
+  console.log(currentUser);
 
   return (
     <Box className={styles.container}>
@@ -327,6 +335,9 @@ export default function ProfilePage() {
                 {<MdContactSupport size={"20px"} />}
               </Box>
             </Tooltip>
+            <Box>
+              <KarmaLevel />
+            </Box>
           </VStack>
         </Box>
       </Box>
@@ -359,18 +370,10 @@ export default function ProfilePage() {
                     <CircularProgressLabel>{`${completionPercentage}%`}</CircularProgressLabel>
                   </CircularProgress>
                   <Text>
-                    {`Seems your profile is not completed!  ${
-                      !currentUser?.email ? "Add Email &" : ""
-                    } ${
-                      !currentUser?.userName && !currentUser?.profileImg
-                        ? "Add Name & Profile Image &"
+                    {`Seems your profile is not completed.${
+                      currentUser?.gotProfileReward === false
+                        ? "Complete & earn 100 Karma Points 😋"
                         : ""
-                    } ${
-                      !currentUser?.hasHouseId ? "Mint House" : ""
-                    } to Complete ${
-                      currentUser?.gotProfileReward
-                        ? ""
-                        : "& earn 100 Karma Points 😋"
                     }`}
                   </Text>
                 </Flex>
@@ -479,11 +482,11 @@ export default function ProfilePage() {
                   p={0}
                   className={styles.box}
                 >
-                  {currentUser?.hasHouseId ? (
+                  {currentUser?.hasHouseId !== null ? (
                     <Box h={"100%"} className={styles.houseDiv}>
                       <Image
                         objectFit={"contain"}
-                        src={currentUser.hasHouseMetadata.image}
+                        src={currentUser?.hasHouseMetadata?.image}
                         width={"100%"}
                         height={"100%"}
                         alt="house_img"

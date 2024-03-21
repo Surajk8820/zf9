@@ -6,12 +6,16 @@ import {
 } from "../../const/addresses";
 import {
   ThirdwebNftMedia,
+  Web3Button,
+  useAddress,
   useContract,
+  useNFTBalance,
   useValidDirectListings,
   useValidEnglishAuctions,
 } from "@thirdweb-dev/react";
 import { Box, Flex, Skeleton, Text } from "@chakra-ui/react";
 import styles from "../../styles/NFT.module.css";
+import { toast } from "react-toastify";
 
 type Props = {
   nft: NFT;
@@ -21,6 +25,14 @@ export default function NFTComponent({ nft }: Props) {
   const { contract: marketplace, isLoading: loadingMarketplace } = useContract(
     MARKETPLACE_ADDRESS,
     "marketplace-v3"
+  );
+
+  const { contract } = useContract(CONZURA_NFT_COLLECTION_ADDRESS);
+  const address = useAddress();
+  const { data: isOwned, isLoading: isOwnedLoading } = useNFTBalance(
+    contract,
+    address,
+    nft?.metadata?.id
   );
 
   const { data: directListing, isLoading: loadingDirectListing } =
@@ -53,36 +65,9 @@ export default function NFTComponent({ nft }: Props) {
         {nft.metadata.name}
       </Text>
 
-      <Box mt={2}>
-        {loadingMarketplace || loadingDirectListing || loadingAuction ? (
-          <Skeleton></Skeleton>
-        ) : directListing && directListing[0] ? (
-          <Box>
-            <Flex direction={"column"}>
-              <Text fontSize={{ base: "8px", md: "14px" }}>Price</Text>
-              <Text
-                fontSize={{ base: "8px", md: "14px" }}
-              >{`${directListing[0]?.currencyValuePerToken.displayValue} ${directListing[0]?.currencyValuePerToken.symbol}`}</Text>
-            </Flex>
-          </Box>
-        ) : auctionListing && auctionListing[0] ? (
-          <Box>
-            <Flex direction={"column"}>
-              <Text fontSize={"small"}>Minimum Bid</Text>
-              <Text
-                fontSize={"small"}
-              >{`${auctionListing[0]?.minimumBidCurrencyValue.displayValue} ${auctionListing[0]?.minimumBidCurrencyValue.symbol}`}</Text>
-            </Flex>
-          </Box>
-        ) : (
-          <Box>
-            <Flex direction={"column"}>
-              <Text fontSize={{ base: "8px", md: "14px" }}>Price</Text>
-              <Text fontSize={{ base: "8px", md: "14px" }}>Not Listed</Text>
-            </Flex>
-          </Box>
-        )}
-      </Box>
+      {/* <Box mt={2}>
+        ntg
+      </Box> */}
     </Flex>
   );
 }

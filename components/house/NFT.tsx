@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { NFT } from "@thirdweb-dev/sdk";
 import {
   MARKETPLACE_ADDRESS,
@@ -6,38 +6,68 @@ import {
 } from "../../const/addresses";
 import {
   ThirdwebNftMedia,
+  Web3Button,
+  useActiveClaimConditionForWallet,
+  useAddress,
+  useClaimConditions,
+  useClaimIneligibilityReasons,
   useContract,
+  useContractMetadata,
+  useNFTBalance,
+  useTotalCirculatingSupply,
+  useTotalCount,
   useValidDirectListings,
   useValidEnglishAuctions,
 } from "@thirdweb-dev/react";
-import { Box, Flex, Skeleton, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Flex,
+  Skeleton,
+  SkeletonText,
+  Text,
+} from "@chakra-ui/react";
 import styles from "../../styles/NFT.module.css";
+import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 type Props = {
   nft: NFT;
 };
 
 export default function NFTComponent({ nft }: Props) {
-  const { contract: marketplace, isLoading: loadingMarketplace } = useContract(
-    MARKETPLACE_ADDRESS,
-    "marketplace-v3"
+  // const { contract: marketplace, isLoading: loadingMarketplace } = useContract(
+  //   MARKETPLACE_ADDRESS,
+  //   "marketplace-v3"
+  // );
+
+  // const { data: directListing, isLoading: loadingDirectListing } =
+  //   useValidDirectListings(marketplace, {
+  //     tokenContract: HOUSE_NFT_COLLECTION_ADDRESS,
+  //     tokenId: nft.metadata.id,
+  //   });
+
+  // //Add for auciton section
+  // const { data: auctionListing, isLoading: loadingAuction } =
+  //   useValidEnglishAuctions(marketplace, {
+  //     tokenContract: HOUSE_NFT_COLLECTION_ADDRESS,
+  //     tokenId: nft.metadata.id,
+  //   });
+
+  const { contract } = useContract(HOUSE_NFT_COLLECTION_ADDRESS);
+  const address = useAddress();
+
+  const { data: claimCondition, isLoading: loadingClaimCondition } =
+    useClaimConditions(contract, nft?.metadata?.id);
+
+  const { data: isOwned, isLoading: isOwnedLoading } = useNFTBalance(
+    contract,
+    address,
+    nft?.metadata?.id
   );
 
-
-  const { data: directListing, isLoading: loadingDirectListing } =
-    useValidDirectListings(marketplace, {
-      tokenContract: HOUSE_NFT_COLLECTION_ADDRESS,
-      tokenId: nft.metadata.id,
-    });
-
-  //Add for auciton section
-  const { data: auctionListing, isLoading: loadingAuction } =
-    useValidEnglishAuctions(marketplace, {
-      tokenContract: HOUSE_NFT_COLLECTION_ADDRESS,
-      tokenId: nft.metadata.id,
-    });
-
-
+  console.log(isOwned?.toNumber());
   return (
     <Flex className={styles.container}>
       <Box borderRadius={"4px"} overflow={"hidden"}>
@@ -54,37 +84,53 @@ export default function NFTComponent({ nft }: Props) {
       <Text fontWeight={800} fontSize={{ base: "12px", md: "16px" }}>
         {nft.metadata.name}
       </Text>
-
-      <Box mt={2}>
-        {loadingMarketplace || loadingDirectListing || loadingAuction ?  (
-          <Skeleton></Skeleton>
-        ) : directListing && directListing[0] ? (
-          <Box>
-            <Flex direction={"column"}>
-              <Text fontSize={{ base: "8px", md: "14px" }}>Price</Text>
-              <Text
-                fontSize={{ base: "8px", md: "14px" }}
-              >{`${directListing[0]?.currencyValuePerToken.displayValue} ${directListing[0]?.currencyValuePerToken.symbol}`}</Text>
-            </Flex>
-          </Box>
-        ) : auctionListing && auctionListing[0] ? (
-          <Box>
-            <Flex direction={"column"}>
-              <Text fontSize={"small"}>Minimum Bid</Text>
-              <Text
-                fontSize={"small"}
-              >{`${auctionListing[0]?.minimumBidCurrencyValue.displayValue} ${auctionListing[0]?.minimumBidCurrencyValue.symbol}`}</Text>
-            </Flex>
-          </Box>
+      <Box mb={2} fontSize={"12px"} color={"grey"}>
+        {!claimCondition ? (
+          <SkeletonText mt="4" noOfLines={2} spacing="4" skeletonHeight="1" />
         ) : (
-          <Box>
-            <Flex direction={"column"}>
-              <Text fontSize={{ base: "8px", md: "14px" }}>Price</Text>
-              <Text fontSize={{ base: "8px", md: "14px" }}>Not Listed</Text>
-            </Flex>
-          </Box>
+          <>
+            <Text>{`Current Phase : ${
+              claimCondition[0]?.metadata?.name || "N/A"
+            }`}</Text>
+            <Text>{`Max Claimable : ${
+              claimCondition[0]?.maxClaimablePerWallet || "N/A"
+            }/${claimCondition[0]?.maxClaimableSupply || "N/A"}`}</Text>
+          </>
         )}
       </Box>
+      {contract && address && isOwned && isOwned.toNumber() > 0 ? (
+        <Web3Button
+          style={{ color: "white", background: "#050A30" }}
+          isDisabled
+          contractAddress={HOUSE_NFT_COLLECTION_ADDRESS}
+          action={(contract) => contract.erc1155.claim(nft?.metadata?.id, 1)}
+          onSuccess={() =>
+            toast.success("Claimed Success!", {
+              position: "bottom-center",
+              autoClose: 3000,
+              theme: "colored",
+            })
+          }
+        >
+          Claimed
+        </Web3Button>
+      ) : (
+        <Web3Button
+          style={{ color: "white", background: "blue" }}
+          contractAddress={HOUSE_NFT_COLLECTION_ADDRESS}
+          action={(contract) => contract.erc1155.claim(nft?.metadata?.id, 1)}
+          onSuccess={() =>
+            toast.success("Claimed Success!", {
+              position: "bottom-center",
+              autoClose: 3000,
+              theme: "colored",
+            })
+          }
+        >
+          Claim NFT
+        </Web3Button>
+      )}
+      <ToastContainer />
     </Flex>
   );
 }

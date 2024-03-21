@@ -35,12 +35,7 @@ export default function NFTGrid({
       ) : data && data.length > 0 ? (
         data.map((nft) =>
           !overrideOnclickBehavior ? (
-            <Link
-              href={`/house_page/token/${HOUSE_NFT_COLLECTION_ADDRESS}/${nft.metadata.id}`}
-              key={nft.metadata.id}
-            >
-              <NFT nft={nft} />
-            </Link>
+            <NFT nft={nft} />
           ) : (
             <div
               key={nft.metadata.id}

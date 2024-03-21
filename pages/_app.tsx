@@ -2,15 +2,8 @@ import type { AppProps } from "next/app";
 import {
   ThirdwebProvider,
   metamaskWallet,
-  coinbaseWallet,
-  walletConnect,
   embeddedWallet,
   smartWallet,
-  trustWallet,
-  zerionWallet,
-  rainbowWallet,
-  localWallet,
-  safeWallet,
 } from "@thirdweb-dev/react";
 import "../styles/globals.css";
 import { ChakraProvider } from "@chakra-ui/react";

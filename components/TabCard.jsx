@@ -21,23 +21,23 @@ const TabCard = () => {
 
   let cardData = [
     {
-      image: "https://imgur.com/DTL8kUW.png",
+      image: "https://res.cloudinary.com/dddnxiqpq/image/upload/v1711090930/hou_smejyv.png",
       collectionName: "Zura House",
     },
     {
-      image: "https://imgur.com/ocpIpjV.png",
+      image: "https://res.cloudinary.com/dddnxiqpq/image/upload/v1711091203/fd_oxivb3.png",
       collectionName: "Hippie Alien Space Hovership",
     },
     {
-      image: "https://imgur.com/k6IktDj.png",
+      image: "https://res.cloudinary.com/dddnxiqpq/image/upload/v1711091487/conz_myszwm.png",
       collectionName: "Conzura",
     },
     {
-      image: "https://imgur.com/Prfnh4J.png",
+      image: "https://res.cloudinary.com/dddnxiqpq/image/upload/v1711091641/dum_cgwt8a.png",
       collectionName: "Zurian NFT's",
     },
     {
-      image: "https://imgur.com/mbzPYaS.png",
+      image: "https://res.cloudinary.com/dddnxiqpq/image/upload/v1711091641/dum_cgwt8a.png",
       collectionName: "Zura Land NFT",
     },
   ];

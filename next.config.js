@@ -3,7 +3,7 @@ const nextConfig = {
   reactStrictMode: true,
   basePath: "",
   images: {
-    domains: ["imgur.com", "zuraverse.xyz"],
+    domains: ["imgur.com", "zuraverse.xyz", "res.cloudinary.com"],
   },
 };
 

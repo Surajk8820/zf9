@@ -30,7 +30,7 @@ const Home: NextPage = () => {
         <Image
           width={'100%'}
           height={'100%'}
-          src="https://imgur.com/d47svBB.png"
+          src="https://res.cloudinary.com/dddnxiqpq/image/upload/v1711090903/1_osiegz.png"
           alt="seaction_logo"
         />
       </Box>
@@ -59,18 +59,18 @@ const Home: NextPage = () => {
         <Tabs>
           <TabList>
             <Tab>Zuraverse</Tab>
-            <Tab>Conzura</Tab>
+            {/* <Tab>Conzura</Tab> */}
           </TabList>
 
           <TabPanels>
             <TabPanel className={styles.grid}>
               <TabCard />
             </TabPanel>
-            <TabPanel className={styles.grid}>
+            {/* <TabPanel className={styles.grid}>
               <Box onClick={redirectToConzura} w={'300px'} h={'200px'} border={'1px solid grey'} borderRadius={'15px'}>
                 <Image width={400} height={400} src={'https://imgur.com/KbSB528.png'}  alt="logo"/>
               </Box>
-            </TabPanel>
+            </TabPanel> */}
           </TabPanels>
         </Tabs>
       </Box>

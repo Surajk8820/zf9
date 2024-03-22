@@ -33,9 +33,9 @@ export default function NFTGrid({
           <Skeleton key={index} height={"312px"} width={"100%"} />
         ))
       ) : data && data.length > 0 ? (
-        data.map((nft) =>
+        data.map((nft, index) =>
           !overrideOnclickBehavior ? (
-            <NFT nft={nft} />
+            <NFT nft={nft} key={index} />
           ) : (
             <div
               key={nft.metadata.id}

@@ -72,7 +72,7 @@ const Navbar = () => {
               <Input
                 focusBorderColor="#44444C"
                 type="text"
-                placeholder="Search for collections"
+                placeholder="Search for collections by name"
               />
               {/* <Box
                 p={2}

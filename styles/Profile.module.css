@@ -76,7 +76,6 @@
   height: fit-content;
   border-radius: 15px;
   box-shadow: rgba(63, 63, 252, 0.35) 0px 5px 15px;
-  overflow: hidden;
 }
 
 .coverImg {
@@ -223,19 +222,47 @@
   padding: 8px;
 }
 
+.mobileNav {
+  align-items: center;
+  justify-content: space-between;
+  height: 7vh;
+  width: 100%;
+}
+
+.tabs {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
 
 @media (max-width: 768px) {
-  .sidebar{
+  .sidebar {
     display: none;
   }
 
-  .main{
+  .main {
     flex-direction: column;
+    height: fit-content;
+    padding: 20px;
   }
 
-  .profileSection{
+  .profileSection {
     width: 100%;
     height: fit-content;
-    border: 1px solid red;
+    border: 1px solid rgb(72, 71, 71);
+    overflow: hidden;
+  }
+
+  .nftGrid {
+    grid-template-columns: repeat(1, 1fr);
+  }
+
+  .tabs {
+    flex-direction: column-reverse;
+  }
+
+  .tabs > div {
+    width: 100%;
+    gap: 0px;
   }
 }

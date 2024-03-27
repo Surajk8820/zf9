@@ -307,7 +307,7 @@ export default function ProfilePage() {
   // console.log(currentUser);
 
   return (
-    <Box className={styles.container} border={"1px solid red"}>
+    <Box className={styles.container}>
       <Box className={styles.sidebar}>
         <Box onClick={redirectToHome} className={styles.logo}>
           <Image src="https://imgur.com/scwbA1J.png" width={"40px"} />
@@ -342,6 +342,17 @@ export default function ProfilePage() {
         </Box>
       </Box>
       <Box className={styles.main}>
+        <Flex
+          display={{ base: "flex", md: "none" }}
+          className={styles.mobileNav}
+        >
+          <Box onClick={redirectToHome} w={"40px"} h={"40px"}>
+            <Image src="https://imgur.com/scwbA1J.png" width={"100%"} />
+          </Box>
+          <Box>
+            <ConnectWallet />
+          </Box>
+        </Flex>
         <Box className={styles.profileSection}>
           <Box position={"relative"}>
             <Box className={styles.coverImg}>
@@ -524,31 +535,43 @@ export default function ProfilePage() {
           </Box>
         </Box>
         <Box className={styles.nftSection}>
-          <Tabs variant="solid-rounded" colorScheme="blue">
+          <Tabs
+            borderRadius={"5px"}
+            w={{ base: "100%", md: "fit-content" }}
+            gap={{ base: 2, md: 7 }}
+            background={"#222528"}
+          >
             <TabList
               display={"flex"}
               justifyContent={"space-between"}
               alignItems={"center"}
               gap={0}
+              border={"none"}
             >
-              <Flex gap={8} w={"50%"}>
-                <InputGroup>
+              <Flex className={styles.tabs} gap={8} w={"100%"}>
+                <InputGroup width={"50%"}>
                   <InputLeftElement pointerEvents="none">
                     <Search2Icon color="gray.300" />
                   </InputLeftElement>
                   <Input
-                    focusBorderColor="#44444C"
+                    border="1px solid #44444C"
                     type="text"
                     placeholder="Search for collections"
                   />
                 </InputGroup>
                 <Flex gap={2}>
-                  <Tab>House</Tab>
-                  <Tab>Hash</Tab>
-                  <Tab>Conzura</Tab>
+                  <Tab w={"100%"} fontSize={{ base: "14px", md: "16px" }}>
+                    House
+                  </Tab>
+                  <Tab w={"100%"} fontSize={{ base: "14px", md: "16px" }}>
+                    Hash
+                  </Tab>
+                  <Tab w={"100%"} fontSize={{ base: "14px", md: "16px" }}>
+                    Conzura
+                  </Tab>
                 </Flex>
               </Flex>
-              <Box>
+              <Box display={{ base: "none", md: "block" }}>
                 <ConnectWallet />
               </Box>
             </TabList>

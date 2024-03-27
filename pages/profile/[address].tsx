@@ -346,7 +346,12 @@ export default function ProfilePage() {
           display={{ base: "flex", md: "none" }}
           className={styles.mobileNav}
         >
-          <Box onClick={redirectToHome} w={"40px"} h={"40px"}>
+          <Box
+            cursor={"pointer"}
+            onClick={redirectToHome}
+            w={"40px"}
+            h={"40px"}
+          >
             <Image src="https://imgur.com/scwbA1J.png" width={"100%"} />
           </Box>
           <Box>
@@ -438,24 +443,21 @@ export default function ProfilePage() {
                 <Box className={styles.box}>
                   <Flex direction="column">
                     <Text>Karma Points</Text>
-                    <Text fontSize={"40px"}>
+                    <Text fontSize={{ base: "16px", md: "25px" }}>
                       {tokenBalance?.displayValue || 0}
                     </Text>
                   </Flex>
                   <Image
                     src="https://imgur.com/vaMs9nq.png"
-                    w={"40%"}
-                    h={"40%"}
+                    w={"20%"}
+                    h={"20%"}
                     alt="logo"
-                    pos={"absolute"}
-                    right={0}
-                    bottom={1}
                   />
                 </Box>
                 <Box className={styles.box}>
                   <Flex direction="column">
                     <Text>{"Trees Planted"}</Text>
-                    <Text fontSize={"40px"}>
+                    <Text fontSize={{ base: "16px", md: "25px" }}>
                       {Number(tokenBalance?.displayValue) / 10 || 0}
                     </Text>
                   </Flex>
@@ -464,16 +466,13 @@ export default function ProfilePage() {
                     w={"40%"}
                     h={"40%"}
                     alt="logo"
-                    pos={"absolute"}
-                    right={0}
-                    bottom={1}
                   />
                 </Box>
                 <Box className={styles.box}>
                   <Flex direction="column">
-                    <Text>{"Carbon Offset (tonne)"}</Text>
-                    <Text fontSize={"40px"}>
-                      {(Number(tokenBalance?.displayValue) / 10) * 0.025 || 0}
+                    <Text>{"Carbon Offset"}</Text>
+                    <Text fontSize={{ base: "16px", md: "25px" }}>
+                      {`${(Number(tokenBalance?.displayValue) / 10) * 0.025 || 0}`}
                     </Text>
                   </Flex>
                   <Image
@@ -481,28 +480,29 @@ export default function ProfilePage() {
                     w={"40%"}
                     h={"40%"}
                     alt="logo"
-                    pos={"absolute"}
-                    right={0}
-                    bottom={1}
                   />
                 </Box>
                 <Flex
                   align={"center"}
-                  border={"1px solid red"}
                   justify={"center"}
                   p={0}
                   className={styles.box}
                 >
                   {currentUser?.hasHouseId !== null ? (
-                    <Box h={"100%"} className={styles.houseDiv}>
+                    <Box
+                      h={"9vh"}
+                      className={styles.houseDiv}
+                    >
                       <Image
-                        objectFit={"contain"}
                         src={currentUser?.hasHouseMetadata?.image}
                         width={"100%"}
                         height={"100%"}
                         alt="house_img"
                       />
-                      <Text className={styles.houseTxt}>
+                      <Text
+                        className={styles.houseTxt}
+                        fontSize={{ base: "20px", md: "30px" }}
+                      >
                         {currentUser?.hasHouseMetadata?.name}
                       </Text>
                     </Box>
@@ -535,12 +535,7 @@ export default function ProfilePage() {
           </Box>
         </Box>
         <Box className={styles.nftSection}>
-          <Tabs
-            borderRadius={"5px"}
-            w={{ base: "100%", md: "fit-content" }}
-            gap={{ base: 2, md: 7 }}
-            background={"#222528"}
-          >
+          <Tabs borderRadius={"5px"} w={"100%"} gap={{ base: 2, md: 7 }}>
             <TabList
               display={"flex"}
               justifyContent={"space-between"}

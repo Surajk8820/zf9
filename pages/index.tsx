@@ -12,24 +12,24 @@ import {
   TabPanels,
   Tab,
   TabPanel,
-  Image
+  Image,
 } from "@chakra-ui/react";
 import TabCard from "../components/TabCard";
 import { useRouter } from "next/router";
 
 const Home: NextPage = () => {
-  const router = useRouter()
+  const router = useRouter();
 
   const redirectToConzura = () => {
-   router.push("/conzura")
-  }
+    router.push("/conzura");
+  };
 
   return (
     <Box className={styles.container}>
       <Box className={styles.headingSection}>
         <Image
-          width={'100%'}
-          height={'100%'}
+          width={"100%"}
+          height={"100%"}
           src="https://res.cloudinary.com/dddnxiqpq/image/upload/v1711090903/1_osiegz.png"
           alt="seaction_logo"
         />

@@ -11,7 +11,15 @@
 
 .headingSection {
   position: relative;
+  object-fit: cover;
 }
+
+.headingSection > img{
+  object-fit: cover;
+  object-position:left;
+}
+
+
 
 .headLine {
   position: absolute;

@@ -7,6 +7,10 @@
   color: white;
 }
 
+.container::-webkit-scrollbar{
+  display: none;
+}
+
 .hashBanner {
   width: "100%";
   height: 318px;
@@ -66,7 +70,7 @@
 
 .searchDiv {
   padding: 20px 40px;
-  margin-top: 20px;
+  margin-top: 10px;
 }
 
 @keyframes rotateOutlines {
@@ -103,5 +107,9 @@
 
   .detailsDiv > div:nth-child(2) {
     padding: 30px;
+  }
+
+  .searchDiv {
+    padding: 20px;
   }
 }

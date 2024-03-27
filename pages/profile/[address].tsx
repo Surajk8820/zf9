@@ -203,7 +203,7 @@ export default function ProfilePage() {
           };
 
           const response = await axios.post(
-            `https://zura-backend-yzro.vercel.app/user/profile`,
+            `http://ec2-13-127-57-144.ap-south-1.compute.amazonaws.com:8080/user/profile`,
             payload
           );
           // console.log(response.data);
@@ -270,7 +270,7 @@ export default function ProfilePage() {
   const updateBackend = (payload: any) => {
     axios
       .put(
-        "https://zura-backend-yzro.vercel.app/user/profile/update",
+        "http://ec2-13-127-57-144.ap-south-1.compute.amazonaws.com:8080/user/profile/update",
         payload,
         {
           headers: {
@@ -304,10 +304,10 @@ export default function ProfilePage() {
     );
   }
 
-  console.log(currentUser);
+  // console.log(currentUser);
 
   return (
-    <Box className={styles.container}>
+    <Box className={styles.container} border={"1px solid red"}>
       <Box className={styles.sidebar}>
         <Box onClick={redirectToHome} className={styles.logo}>
           <Image src="https://imgur.com/scwbA1J.png" width={"40px"} />

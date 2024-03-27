@@ -137,24 +137,27 @@ const Hash = () => {
               borderRadius={"5px"}
               w={{ base: "100%", md: "fit-content" }}
               p={2}
-              gap={7}
+              gap={{ base: 2, md: 7 }}
               background={"#222528"}
             >
               <Tab
                 w={"100%"}
                 _selected={{ color: "white", bg: "blue", borderRadius: "5px" }}
+                fontSize={{ base: "14px", md: "16px" }}
               >
                 Items
               </Tab>
               <Tab
                 w={"100%"}
                 _selected={{ color: "white", bg: "blue", borderRadius: "5px" }}
+                fontSize={{ base: "14px", md: "16px" }}
               >
                 Activity
               </Tab>
               <Tab
                 w={"100%"}
                 _selected={{ color: "white", bg: "blue", borderRadius: "5px" }}
+                fontSize={{ base: "14px", md: "16px" }}
               >
                 Analytics
               </Tab>
@@ -201,6 +204,7 @@ const Hash = () => {
                   h={"40px"}
                   onClick={handleGridDisplay}
                   border={"1px solid #444444"}
+                  display={{base : "none", md : "flex"}}
                 >
                   {gridCount === 5 ? (
                     <BsFillGrid3X3GapFill size={"24px"} />

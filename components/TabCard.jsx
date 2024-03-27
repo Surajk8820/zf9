@@ -21,23 +21,28 @@ const TabCard = () => {
 
   let cardData = [
     {
-      image: "https://res.cloudinary.com/dddnxiqpq/image/upload/v1711090930/hou_smejyv.png",
+      image:
+        "https://res.cloudinary.com/dddnxiqpq/image/upload/v1711090930/hou_smejyv.png",
       collectionName: "Zura House",
     },
     {
-      image: "https://res.cloudinary.com/dddnxiqpq/image/upload/v1711091203/fd_oxivb3.png",
+      image:
+        "https://res.cloudinary.com/dddnxiqpq/image/upload/v1711091203/fd_oxivb3.png",
       collectionName: "Hippie Alien Space Hovership",
     },
     {
-      image: "https://res.cloudinary.com/dddnxiqpq/image/upload/v1711091487/conz_myszwm.png",
+      image:
+        "https://res.cloudinary.com/dddnxiqpq/image/upload/v1711091487/conz_myszwm.png",
       collectionName: "Conzura",
     },
     {
-      image: "https://res.cloudinary.com/dddnxiqpq/image/upload/v1711091641/dum_cgwt8a.png",
-      collectionName: "Zurian NFT's",
+      image:
+        "https://res.cloudinary.com/dddnxiqpq/image/upload/v1711091641/dum_cgwt8a.png",
+      collectionName: "Zurian NFT",
     },
     {
-      image: "https://res.cloudinary.com/dddnxiqpq/image/upload/v1711091641/dum_cgwt8a.png",
+      image:
+        "https://res.cloudinary.com/dddnxiqpq/image/upload/v1711091641/dum_cgwt8a.png",
       collectionName: "Zura Land NFT",
     },
   ];
@@ -56,8 +61,10 @@ const TabCard = () => {
                 <Image width={600} height={600} src={e.image} alt="" />
               </Box>
               <Box mt={2} pl={2}>
-                <Text fontSize={"20px"}>{e.collectionName}</Text>
-                <Text color={"grey"}>Zuraverse</Text>
+                <Text fontSize={{ base: "14px", md: "20px" }}>
+                  {e.collectionName}
+                </Text>
+                <Text fontSize={{ base: "12px", md: "20px" }} color={"grey"}>Zuraverse</Text>
               </Box>
             </Box>
           );

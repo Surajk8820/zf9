@@ -141,6 +141,19 @@ export default function ProfilePage() {
 
   useEffect(() => {
     updateCompletion();
+     if (currentUser?.hasHouseId === 0) {
+      setCardColor("#0000FF");
+    } else if (currentUser?.hasHouseId === 1) {
+      setCardColor("#BE1CC5");
+    } else if (currentUser?.hasHouseId === 2) {
+      setCardColor("#FBC00E");
+    } else if (currentUser?.hasHouseId === 3) {
+      setCardColor("#04D010");
+    } else if (currentUser?.hasHouseId === 4) {
+      setCardColor("#D01110");
+    } else {
+      setCardColor("");
+    }
   }, [currentUser]);
 
   useEffect(() => {
@@ -285,22 +298,6 @@ export default function ProfilePage() {
     return redirectToHome();
   }
 
-  console.log(houseCardColor);
-  useEffect(() => {
-    if (currentUser?.hasHouseId === 0) {
-      setCardColor("#0000FF");
-    } else if (currentUser?.hasHouseId === 1) {
-      setCardColor("#BE1CC5");
-    } else if (currentUser?.hasHouseId === 2) {
-      setCardColor("#FBC00E");
-    } else if (currentUser?.hasHouseId === 3) {
-      setCardColor("#04D010");
-    } else if (currentUser?.hasHouseId === 4) {
-      setCardColor("#D01110");
-    } else {
-      setCardColor("");
-    }
-  }, [currentUser]);
 
   return (
     <Box className={styles.container}>

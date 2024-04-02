@@ -15,7 +15,6 @@ import {
 } from "@thirdweb-dev/react";
 import { Box, Flex, Skeleton, Text } from "@chakra-ui/react";
 import styles from "../../styles/NFT.module.css";
-import { toast } from "react-toastify";
 
 type Props = {
   nft: NFT;

@@ -44,9 +44,9 @@ export function EditModal({ updateFunc, currentUser }: any) {
       email,
     };
 
-    console.log(payload)
+    console.log(payload);
 
-    updateFunc(payload)
+    updateFunc(payload);
   };
 
   useEffect(() => {
@@ -72,7 +72,7 @@ export function EditModal({ updateFunc, currentUser }: any) {
       </Button>
       <Modal finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose}>
         {" "}
-        <ModalOverlay />
+        <ModalOverlay backdropFilter="blur(5px)" />
         <ModalContent bg={"#222528"} color={"white"}>
           <ModalHeader>Edit Profile</ModalHeader>
           <ModalCloseButton />

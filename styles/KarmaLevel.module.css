@@ -4,33 +4,32 @@
   font-family: "Anta", sans-serif;
 }
 
-.level{
-    gap: 5px;
-    justify-content: space-between;
+.level {
+  gap: 5px;
+  justify-content: space-between;
 }
 
-.level > button{
-    min-width: 20px;
-    height: fit-content;
-    border-radius: 30%;
-    font-size: 12px;
-    background-color: grey;
+.level > button {
+  min-width: 20px;
+  height: fit-content;
+  border-radius: 30%;
+  font-size: 12px;
 }
 
-.level > button:nth-child(1){
-    background-color: white;
-    width: fit-content;
-    color: black;
-    border-radius: 4px;
-    padding: 0px 5px;
+.active {
+  background-color: #0EFF1F;
+  width: fit-content;
+  color: rgb(16, 1, 1);
+  border-radius: 4px;
+  padding: 0px 5px;
 }
 
-.NftDiv{
-    border: 2px solid #00FFFF;
-    height: 30vh;
-    margin-top: 20px;
-    background-image: url('https://imgur.com/EtFE0KK.png');
-    background-position: center;
-    background-size: cover;
-    background-repeat: no-repeat;
+.notactive {
+  background-color: rgb(114, 114, 114);
+}
+
+.NftDiv {
+  border: 2px solid #00ffff;
+  height: 30vh;
+  margin-top: 20px;
 }

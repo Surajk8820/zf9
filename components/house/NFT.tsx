@@ -26,37 +26,24 @@ import {
   Skeleton,
   SkeletonText,
   Text,
+  useToast,
 } from "@chakra-ui/react";
 import styles from "../../styles/NFT.module.css";
 import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
 type Props = {
   nft: NFT;
 };
 
 export default function NFTComponent({ nft }: Props) {
-  // const { contract: marketplace, isLoading: loadingMarketplace } = useContract(
-  //   MARKETPLACE_ADDRESS,
-  //   "marketplace-v3"
-  // );
-
-  // const { data: directListing, isLoading: loadingDirectListing } =
-  //   useValidDirectListings(marketplace, {
-  //     tokenContract: HOUSE_NFT_COLLECTION_ADDRESS,
-  //     tokenId: nft.metadata.id,
-  //   });
-
-  // //Add for auciton section
-  // const { data: auctionListing, isLoading: loadingAuction } =
-  //   useValidEnglishAuctions(marketplace, {
-  //     tokenContract: HOUSE_NFT_COLLECTION_ADDRESS,
-  //     tokenId: nft.metadata.id,
-  //   });
-
   const { contract } = useContract(HOUSE_NFT_COLLECTION_ADDRESS);
   const address = useAddress();
+  const { data: claimEligibility, isLoading: loadingEligibility } =
+    useClaimIneligibilityReasons(contract, {
+      walletAddress: address as string,
+      quantity: 1,
+    });
+  const toast = useToast();
 
   const { data: claimCondition, isLoading: loadingClaimCondition } =
     useClaimConditions(contract, nft?.metadata?.id);
@@ -67,7 +54,8 @@ export default function NFTComponent({ nft }: Props) {
     nft?.metadata?.id
   );
 
-  console.log(isOwned?.toNumber());
+  console.log(claimEligibility, loadingEligibility);
+
   return (
     <Flex className={styles.container}>
       <Box borderRadius={"4px"} overflow={"hidden"}>
@@ -104,13 +92,6 @@ export default function NFTComponent({ nft }: Props) {
           isDisabled
           contractAddress={HOUSE_NFT_COLLECTION_ADDRESS}
           action={(contract) => contract.erc1155.claim(nft?.metadata?.id, 1)}
-          onSuccess={() =>
-            toast.success("Claimed Success!", {
-              position: "bottom-center",
-              autoClose: 3000,
-              theme: "colored",
-            })
-          }
         >
           Claimed
         </Web3Button>
@@ -120,17 +101,23 @@ export default function NFTComponent({ nft }: Props) {
           contractAddress={HOUSE_NFT_COLLECTION_ADDRESS}
           action={(contract) => contract.erc1155.claim(nft?.metadata?.id, 1)}
           onSuccess={() =>
-            toast.success("Claimed Success!", {
-              position: "bottom-center",
-              autoClose: 3000,
-              theme: "colored",
+            toast({
+              title: `claimed successfully!`,
+              status: "success",
+              isClosable: true,
             })
           }
+          onError={(e) => {
+            toast({
+              title: `Error: ${e.message}`,
+              status: "error",
+              isClosable: true,
+            });
+          }}
         >
-          Claim NFT
+          Claim Nft
         </Web3Button>
       )}
-      <ToastContainer />
     </Flex>
   );
 }

@@ -21,6 +21,7 @@ import {
   Grid,
   CircularProgress,
   CircularProgressLabel,
+  useToast,
 } from "@chakra-ui/react";
 import React, { useEffect, useMemo, useState, useRef } from "react";
 import styles from "../../styles/Profile.module.css";
@@ -31,31 +32,20 @@ import {
   HOUSE_NFT_COLLECTION_ADDRESS,
   KARMA_TOKEN_ADDRESS,
 } from "../../const/addresses";
-import { useRouter } from "next/router";
-import NFTGrid from "../../components/hash/NFTGrid";
-import ConzuraNFTGrid from "../../components/conzura/ConzuraNFTGrid";
+import { useRouter } from "next/navigation";
 import {
   ConnectWallet,
-  SmartWallet,
   ThirdwebNftMedia,
   shortenIfAddress,
-  smartWallet,
-  useChain,
-  useConnect,
+  useClaimToken,
   useContract,
   useDisconnect,
-  useIsWalletModalOpen,
   useOwnedNFTs,
   usePersonalWalletAddress,
-  useSetIsWalletModalOpen,
-  useSmartWallet,
-  useWallet,
-  useTokenDrop,
-  useTokenSupply,
   useTokenBalance,
-  useClaimToken,
+  useTokenDrop,
 } from "@thirdweb-dev/react";
-import { FaCommentsDollar, FaHome, FaSignal } from "react-icons/fa";
+import { FaHome } from "react-icons/fa";
 import { MdDashboard, MdContactSupport } from "react-icons/md";
 import { CopyIcon, Search2Icon } from "@chakra-ui/icons";
 import { CgProfile } from "react-icons/cg";
@@ -64,30 +54,26 @@ import { useAddress } from "@thirdweb-dev/react";
 import axios from "axios";
 import { EditModal } from "../../components/EditModal";
 import StatusIndicator from "../../components/StatusIndicator";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import ClaimKarmaModal from "../../components/ClaimKarmaModal";
 import { KarmaLevel } from "../../components/KarmaLevel";
-
+import { SendFundModal } from "../../components/SendFundModal";
 // import Sidebar from "../../components/hash/Sidebar";
 
 export default function ProfilePage() {
   const router = useRouter();
-  const currentChain = useChain();
   const disconnect = useDisconnect();
-  const connect = useConnect();
   const address = useAddress();
   const [currentWallet, setCurrentWallet] = useState<string>("");
   const [currentUser, setUser] = useState<any>();
   const [completionPercentage, setCompletionPercentage] = useState(25);
   const tokenDrop = useTokenDrop(KARMA_TOKEN_ADDRESS);
   const [isClaimmed, setIsClaimmed] = useState(false);
-  const [currentHouse, setCurrentHouse] = useState("");
-  const { data: tokenSupply } = useTokenSupply(tokenDrop);
   const { data: tokenBalance } = useTokenBalance(tokenDrop, address);
   const { mutate: claimToken, isLoading: clamming } = useClaimToken(tokenDrop);
   const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
   const { contract: nftCollection } = useContract(HASH_NFT_COLLECTION_ADDRESS);
+  const toast = useToast();
+  const [houseCardColor, setCardColor] = useState("");
   const { contract: nftCollection2 } = useContract(
     CONZURA_NFT_COLLECTION_ADDRESS
   );
@@ -123,7 +109,9 @@ export default function ProfilePage() {
   }
 
   const redirectToHome = () => {
-    router.push("/");
+    if (typeof window !== "undefined") {
+      router.push("/");
+    }
   };
 
   // function for setting current value of profile completion
@@ -203,7 +191,7 @@ export default function ProfilePage() {
           };
 
           const response = await axios.post(
-            `http://ec2-13-127-57-144.ap-south-1.compute.amazonaws.com:8080/user/profile`,
+            `http://3.111.16.20:8080/user/profile`,
             payload
           );
           // console.log(response.data);
@@ -230,22 +218,21 @@ export default function ProfilePage() {
               gotProfileReward: true,
             });
             setIsClaimmed(true);
-            toast.success(`YaY! You got 100 💰Karma`, {
-              position: "bottom-center",
-              autoClose: 3000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              theme: "colored",
+            toast({
+              title: `You git 100 Karma`,
+              status: "success",
+              isClosable: true,
             });
           },
         }
       );
     } catch (err) {
       console.log(err);
-      toast.error("Opps! try again");
+      toast({
+        title: `something went wrong`,
+        status: "error",
+        isClosable: true,
+      });
     }
   };
 
@@ -269,42 +256,51 @@ export default function ProfilePage() {
   // function for manipulating backend
   const updateBackend = (payload: any) => {
     axios
-      .put(
-        "http://ec2-13-127-57-144.ap-south-1.compute.amazonaws.com:8080/user/profile/update",
-        payload,
-        {
-          headers: {
-            Authorization: "Bearer your_access_token",
-            "Content-Type": "application/json",
-            zurawallet: smartWallet,
-          },
-        }
-      )
+      .put("http://3.111.16.20:8080/user/profile/update", payload, {
+        headers: {
+          Authorization: "Bearer your_access_token",
+          "Content-Type": "application/json",
+          zurawallet: smartWallet,
+        },
+      })
       .then((res) => {
-        toast.success("Profile Updated!");
+        toast({
+          title: `Profile updated`,
+          status: "success",
+          isClosable: true,
+        });
       })
       .catch((err) => {
         console.log(err);
         console.log("something went wrong!");
-        toast.error("something went wrong!");
+        toast({
+          title: `something went wrong`,
+          status: "error",
+          isClosable: true,
+        });
       });
   };
 
-  if (!address) {
-    return (
-      <Flex
-        bg={"black"}
-        align={"center"}
-        justify={"center"}
-        w={"100%"}
-        h={"100vh"}
-      >
-        <CircularProgress isIndeterminate color="green.300" />
-      </Flex>
-    );
+  if (!currentUser && !address) {
+    return redirectToHome();
   }
 
-  // console.log(currentUser);
+  console.log(houseCardColor);
+  useEffect(() => {
+    if (currentUser?.hasHouseId === 0) {
+      setCardColor("#0000FF");
+    } else if (currentUser?.hasHouseId === 1) {
+      setCardColor("#BE1CC5");
+    } else if (currentUser?.hasHouseId === 2) {
+      setCardColor("#FBC00E");
+    } else if (currentUser?.hasHouseId === 3) {
+      setCardColor("#04D010");
+    } else if (currentUser?.hasHouseId === 4) {
+      setCardColor("#D01110");
+    } else {
+      setCardColor("");
+    }
+  }, [currentUser]);
 
   return (
     <Box className={styles.container}>
@@ -315,29 +311,30 @@ export default function ProfilePage() {
         <Box className={styles.links}>
           <VStack spacing={6} className={styles.link}>
             <Tooltip hasArrow label="Home" aria-label="A tooltip">
-              <Box className={styles.linkTag}>{<FaHome size={"20px"} />}</Box>
+              <Box _hover={{ bg: houseCardColor }} className={styles.linkTag}>
+                {<FaHome size={"20px"} />}
+              </Box>
             </Tooltip>
             <Tooltip hasArrow label="Dashboard" aria-label="A tooltip">
-              <Box className={styles.linkTag}>
+              <Box _hover={{ bg: houseCardColor }} className={styles.linkTag}>
                 {<MdDashboard size={"20px"} />}
               </Box>
             </Tooltip>
             <Tooltip hasArrow label="Profile" aria-label="A tooltip">
-              <Box className={styles.linkTag}>
+              <Box _hover={{ bg: houseCardColor }} className={styles.linkTag}>
                 {<CgProfile size={"20px"} />}
               </Box>
             </Tooltip>
             <Tooltip hasArrow label="About" aria-label="A tooltip">
-              <Box className={styles.linkTag}>{<FcAbout size={"20px"} />}</Box>
+              <Box _hover={{ bg: houseCardColor }} className={styles.linkTag}>
+                {<FcAbout size={"20px"} />}
+              </Box>
             </Tooltip>
             <Tooltip hasArrow label="Contact Us" aria-label="A tooltip">
-              <Box className={styles.linkTag}>
+              <Box _hover={{ bg: houseCardColor }} className={styles.linkTag}>
                 {<MdContactSupport size={"20px"} />}
               </Box>
             </Tooltip>
-            <Box>
-              <KarmaLevel />
-            </Box>
           </VStack>
         </Box>
       </Box>
@@ -358,7 +355,7 @@ export default function ProfilePage() {
             <ConnectWallet />
           </Box>
         </Flex>
-        <Box className={styles.profileSection}>
+        <Box className={styles.profileSection} bg={houseCardColor}>
           <Box position={"relative"}>
             <Box className={styles.coverImg}>
               <Image
@@ -427,8 +424,9 @@ export default function ProfilePage() {
             </Box>
             <Text>{`Email : ${currentUser?.email || "N/A"}`}</Text>
             <Flex className={styles.transectionBtn}>
-              <Button>Send</Button>
-              <Button>Receive</Button>
+              <Box>
+                <SendFundModal />
+              </Box>
             </Flex>
           </Box>
           {personalWallet === undefined ? (
@@ -444,7 +442,7 @@ export default function ProfilePage() {
                   <Flex direction="column">
                     <Text>Karma Points</Text>
                     <Text fontSize={{ base: "16px", md: "25px" }}>
-                      {tokenBalance?.displayValue || 0}
+                      {(Number(tokenBalance?.displayValue) || 0).toFixed(0)}
                     </Text>
                   </Flex>
                   <Image
@@ -458,7 +456,8 @@ export default function ProfilePage() {
                   <Flex direction="column">
                     <Text>{"Trees Planted"}</Text>
                     <Text fontSize={{ base: "16px", md: "25px" }}>
-                      {Number(tokenBalance?.displayValue) / 10 || 0}
+                      {(Number(tokenBalance?.displayValue) / 10).toFixed(0) ||
+                        0}
                     </Text>
                   </Flex>
                   <Image
@@ -470,9 +469,15 @@ export default function ProfilePage() {
                 </Box>
                 <Box className={styles.box}>
                   <Flex direction="column">
-                    <Text>{"Carbon Offset"}</Text>
+                    <Text>{"Carbon Offset (tonnes)"}</Text>
                     <Text fontSize={{ base: "16px", md: "25px" }}>
-                      {`${(Number(tokenBalance?.displayValue) / 10) * 0.025 || 0}`}
+                      {`${
+                        (
+                          (Number(tokenBalance?.displayValue) / 10) *
+                          0.025
+                        ).toFixed(1) || 0
+                      }
+`}
                     </Text>
                   </Flex>
                   <Image
@@ -489,10 +494,7 @@ export default function ProfilePage() {
                   className={styles.box}
                 >
                   {currentUser?.hasHouseId !== null ? (
-                    <Box
-                      h={"9vh"}
-                      className={styles.houseDiv}
-                    >
+                    <Box h={"9vh"} className={styles.houseDiv}>
                       <Image
                         src={currentUser?.hasHouseMetadata?.image}
                         width={"100%"}
@@ -531,7 +533,6 @@ export default function ProfilePage() {
             >
               {address ? "Logout" : "Login"}
             </button>
-            <ToastContainer />
           </Box>
         </Box>
         <Box className={styles.nftSection}>
@@ -555,13 +556,25 @@ export default function ProfilePage() {
                   />
                 </InputGroup>
                 <Flex gap={2}>
-                  <Tab w={"100%"} fontSize={{ base: "14px", md: "16px" }}>
+                  <Tab
+                    color={houseCardColor}
+                    w={"100%"}
+                    fontSize={{ base: "14px", md: "16px" }}
+                  >
                     House
                   </Tab>
-                  <Tab w={"100%"} fontSize={{ base: "14px", md: "16px" }}>
+                  <Tab
+                    color={houseCardColor}
+                    w={"100%"}
+                    fontSize={{ base: "14px", md: "16px" }}
+                  >
                     Hash
                   </Tab>
-                  <Tab w={"100%"} fontSize={{ base: "14px", md: "16px" }}>
+                  <Tab
+                    color={houseCardColor}
+                    w={"100%"}
+                    fontSize={{ base: "14px", md: "16px" }}
+                  >
                     Conzura
                   </Tab>
                 </Flex>
